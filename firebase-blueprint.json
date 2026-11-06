@@ -1,0 +1,98 @@
+{
+  "entities": {
+    "Reservation": {
+      "title": "Reservation",
+      "description": "Pre-registration entry for Lumina Arcadia event",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier"
+        },
+        "name": {
+          "type": "string",
+          "description": "Applicant name",
+          "minLength": 2,
+          "maxLength": 50
+        },
+        "phone": {
+          "type": "string",
+          "description": "Applicant phone number digits",
+          "minLength": 9,
+          "maxLength": 15
+        },
+        "email": {
+          "type": "string",
+          "description": "Applicant email address",
+          "maxLength": 100
+        },
+        "platform": {
+          "type": "string",
+          "description": "Selected gaming platform",
+          "enum": ["ios", "android", "pc", "console"]
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Registration creation ISO timestamp"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Last update ISO timestamp"
+        }
+      },
+      "required": ["name", "phone", "email", "platform", "createdAt"]
+    },
+    "Feedback": {
+      "title": "Feedback",
+      "description": "User feedback note submitted from the event page",
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": "string",
+          "description": "Feedback message text",
+          "minLength": 1,
+          "maxLength": 500
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Submission ISO timestamp"
+        }
+      },
+      "required": ["text", "createdAt"]
+    },
+    "Stats": {
+      "title": "Stats",
+      "description": "Aggregated public counter and status",
+      "type": "object",
+      "properties": {
+        "count": {
+          "type": "number",
+          "description": "Total number of registrations"
+        },
+        "forceClosed": {
+          "type": "boolean",
+          "description": "Organizer override to close registration"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "Timestamp of last modification"
+        }
+      },
+      "required": ["count", "forceClosed"]
+    }
+  },
+  "firestore": {
+    "/reservations/{reservationId}": {
+      "schema": "Reservation",
+      "description": "Collection of event pre-registrations"
+    },
+    "/feedback/{feedbackId}": {
+      "schema": "Feedback",
+      "description": "Collection of user feedback notes"
+    },
+    "/stats/public": {
+      "schema": "Stats",
+      "description": "Public statistics and registration status"
+    }
+  }
+}

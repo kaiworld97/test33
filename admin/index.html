@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>주최자 관리 센터 (Google Sheets DB) · 루미나 아카디아</title>
+<meta name="description" content="루미나 아카디아 이벤트 Google 스프레드시트 연동 실시간 주최자 관리 센터" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gugi&family=Press+Start+2P&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+  :root { --accent: #F7C948; --bg: #FFF1C2; --ink: #1B1A2E; --muted: #4A4868; --err: #B3261E; color-scheme: light; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Noto Sans KR', system-ui, sans-serif; line-height: 1.6; }
+  a { color: var(--ink); }
+  button { font: inherit; }
+  .px { font-family: 'Press Start 2P', 'Noto Sans KR', monospace; }
+  .gg { font-family: 'Gugi', 'Noto Sans KR', sans-serif; }
+  .muted { color: var(--muted); }
+  .wrap { max-width: 1160px; margin: 0 auto; padding-left: clamp(16px, 4vw, 40px); padding-right: clamp(16px, 4vw, 40px); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 20px; border: 4px solid var(--ink); border-radius: 0; background: var(--accent); color: var(--ink); font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-size: 16px; text-decoration: none; cursor: pointer; box-shadow: 4px 4px 0 var(--ink); gap: 8px; }
+  .btn.paper { background: #fff; }
+  .btn.small { min-height: 38px; padding: 0 12px; font-size: 14px; border-width: 3px; box-shadow: 3px 3px 0 var(--ink); }
+  .btn.danger { background: #fff; color: var(--err); border-color: var(--err); box-shadow: 3px 3px 0 var(--err); }
+  .btn.green { background: #34A853; color: #fff; }
+  .btn:hover:not([disabled]) { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+  .btn.small:hover:not([disabled]) { box-shadow: 5px 5px 0 var(--ink); }
+  .btn:active:not([disabled]) { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--ink); }
+  .btn[disabled] { background: #d8d4e6; color: #6b6985; cursor: not-allowed; box-shadow: none; }
+  .btn:focus-visible, .nv:focus-visible, .inp:focus-visible, input[type=checkbox]:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  .nv { display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; border: 3px solid var(--ink); background: #fff; color: var(--ink); font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-size: 14px; text-decoration: none; box-shadow: 3px 3px 0 var(--ink); }
+  .nv:hover { background: var(--accent); }
+  .card { background: #fff; border: 4px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); }
+
+  .inp { min-height: 44px; padding: 0 12px; border: 3px solid var(--ink); border-radius: 0; background: #fff; color: var(--ink); font-family: inherit; font-size: 15px; width: 100%; }
+  .err { font-size: 14px; color: var(--err); font-weight: 700; }
+  .alert { padding: 12px 14px; border: 3px solid var(--err); background: #fff; color: var(--err); font-weight: 700; font-size: 15px; }
+  .alert.info { border-color: var(--ink); color: var(--ink); background: var(--accent); }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .lbl { font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-size: 15px; }
+
+  /* 관리자 화면 스타일 */
+  .gate { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .gate .card { width: 100%; max-width: 480px; padding: 32px; display: flex; flex-direction: column; gap: 18px; }
+  .adm-top { background: var(--ink); color: #fff; }
+  .adm-top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; min-height: 64px; padding-top: 10px; padding-bottom: 10px; }
+  .adm-top a.nv { box-shadow: none; }
+  .adm-body { padding-top: 24px; padding-bottom: 64px; display: flex; flex-direction: column; gap: 20px; }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .toolbar .inp { min-height: 40px; border-width: 3px; width: auto; }
+  .toolbar .grow { flex: 1 1 200px; }
+  .count { font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-size: 16px; margin-left: auto; }
+  .tbl-wrap { overflow-x: auto; border: 4px solid var(--ink); background: #fff; }
+  table.adm { border-collapse: collapse; width: 100%; min-width: 900px; font-size: 15px; }
+  table.adm th { background: var(--ink); color: #fff; text-align: left; padding: 10px 12px; font-weight: 700; white-space: nowrap; }
+  table.adm td { padding: 10px 12px; border-top: 2px solid #d9d4ee; white-space: nowrap; }
+  table.adm tbody tr:hover { background: #fff8dc; }
+  table.adm td.empty { text-align: center; color: var(--muted); padding: 32px 12px; white-space: normal; }
+  table.adm input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--ink); }
+  .adm-sec { display: flex; flex-direction: column; gap: 10px; }
+  .adm-sec h2 { margin: 0; font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-weight: 400; font-size: 22px; }
+  .setrow { display: flex; align-items: center; gap: 12px; min-height: 40px; }
+  .setrow input { width: 22px; height: 22px; accent-color: var(--ink); }
+  ul.memos { list-style: none; margin: 0; padding: 0; border: 4px solid var(--ink); background: #fff; }
+  ul.memos li { display: flex; gap: 12px; align-items: flex-start; padding: 10px 12px; border-top: 2px solid #d9d4ee; }
+  ul.memos li:first-child { border-top: 0; }
+  ul.memos li .t { flex: none; color: var(--muted); font-size: 13px; padding-top: 3px; white-space: nowrap; }
+  ul.memos li .x { flex: 1; white-space: pre-wrap; word-break: break-word; }
+  ul.memos li.empty { color: var(--muted); }
+
+  dialog { border: 4px solid var(--ink); padding: 0; max-width: 480px; width: calc(100% - 32px); color: var(--ink); background: #fff; }
+  dialog::backdrop { background: rgba(27, 26, 46, .65); }
+  dialog form { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+  dialog h3 { margin: 0; font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-weight: 400; font-size: 22px; }
+  .row { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+  .sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; padding: 0; }
+</style>
+</head>
+<body>
+
+<!-- ============ 관리자: 로그인/입장 화면 ============ -->
+<div id="viewGate" class="gate">
+  <form class="card" id="gateForm" novalidate>
+    <div style="display: flex; align-items: center; gap: 12px; justify-content: center">
+      <svg width="32" height="32" viewBox="0 0 24 24"><path fill="#0F9D58" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14H6v-2h6v2zm4-4H6v-2h10v2zm0-4H6V7h10v2z"/></svg>
+      <h1 class="gg" style="margin: 0; font-size: 28px; font-weight: 400">주최자 관리 센터</h1>
+    </div>
+    <p class="muted" style="margin: 0; text-align: center">
+      사전예약 데이터베이스로 <b>Google 스프레드시트</b>를 사용합니다.<br>
+      주최자 Google 계정으로 로그인하여 스프레드시트를 연동해 주세요.
+    </p>
+
+    <div style="padding: 12px; background: var(--bg); border: 2px solid var(--ink); font-size: 14px; line-height: 1.6">
+      <div>📊 <b>데이터 저장:</b> Google Sheets API 실시간 연동 및 동기화 DB</div>
+      <div>🔒 <b>관리자 계정:</b> gladay014@gmail.com</div>
+    </div>
+
+    <!-- 방법 1: 관리자 비밀번호 로그인 (즉시 입장) -->
+    <div style="display: flex; flex-direction: column; gap: 8px; padding: 16px; border: 3px solid var(--ink); background: #fff">
+      <div style="display: flex; justify-content: space-between; align-items: center">
+        <label for="g-pw" class="lbl" style="font-size: 15px">🔑 관리자 비밀번호로 즉시 로그인</label>
+        <button type="button" id="fillPwBtn" style="font-size: 12px; background: var(--bg); border: 1px solid var(--ink); padding: 2px 8px; cursor: pointer">비밀번호 자동입력</button>
+      </div>
+      <div style="display: flex; gap: 8px">
+        <input id="g-pw" class="inp" type="password" placeholder="비밀번호 (기본: lumina2026)" autocomplete="current-password" style="flex: 1">
+        <button type="button" class="btn small" id="pwLoginBtn" style="flex: none; min-height: 44px">입장하기</button>
+      </div>
+      <div class="muted" style="font-size: 13px">수업 및 주최자 실습용 기본 비밀번호: <b>lumina2026</b></div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 10px; margin: 4px 0">
+      <div style="flex: 1; height: 2px; background: #d9d4ee"></div>
+      <span class="muted" style="font-size: 13px">또는</span>
+      <div style="flex: 1; height: 2px; background: #d9d4ee"></div>
+    </div>
+
+    <!-- 방법 2: Google 계정 로그인 -->
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <button type="button" class="btn paper" id="googleLoginBtn" style="gap: 10px; width: 100%">
+        <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.25v3.15C3.26 21.36 7.34 24 12 24Z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.25C.45 8.18 0 9.98 0 12s.45 3.82 1.25 5.42l4.03-3.15Z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.34 0 3.26 2.64 1.25 6.58l4.03 3.15c.95-2.83 3.6-4.98 6.72-4.98Z"/></svg>
+        <span>Google 계정 로그인 & 시트 연동</span>
+      </button>
+      <div id="errBox" class="alert" style="display: none; font-size: 13px; line-height: 1.5"></div>
+      <div class="err" id="e-pw" style="text-align: center"></div>
+    </div>
+
+    <a href="/" style="text-align: center; font-size: 15px">← 사전예약 신청 화면으로</a>
+  </form>
+</div>
+
+<!-- ============ 관리자: 신청 관리 본체 ============ -->
+<div id="viewAdmin" hidden>
+  <div class="adm-top">
+    <div class="wrap">
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap">
+        <strong class="gg" style="font-size: 19px; font-weight: 400">루미나 아카디아 · 주최자 관리 센터</strong>
+        <span id="statusBadge" class="px" style="font-size: 10px; background: #0F9D58; color: #fff; padding: 4px 8px; border: 2px solid #fff; display: inline-flex; align-items: center; gap: 6px">
+          <span style="width: 6px; height: 6px; background: #fff; border-radius: 50%; display: inline-block"></span>
+          <span id="statusBadgeText">GOOGLE SHEETS DB 연동됨</span>
+        </span>
+        <span id="sheetTitleBadge" class="px" style="font-size: 10px; background: var(--accent); color: var(--ink); padding: 4px 8px; border: 2px solid var(--ink)">[루미나 아카디아] 사전예약 명단 DB</span>
+        <span id="adminEmailBadge" class="px" style="font-size: 10px; background: #fff; color: var(--ink); padding: 4px 8px; border: 2px solid var(--ink)">gladay014@gmail.com</span>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center">
+        <button type="button" class="btn small" id="connectSheetBtn" style="background: #4285F4; color: #fff; box-shadow: 2px 2px 0 #fff" hidden>
+          🔗 Google 시트 연동하기
+        </button>
+        <a id="openSheetBtn" class="btn small green" href="#" target="_blank" rel="noopener noreferrer" style="box-shadow: 2px 2px 0 #fff; color: #fff" hidden>
+          📊 Google 스프레드시트에서 열기 ↗
+        </a>
+        <button type="button" class="btn small paper" id="syncBtn">🔄 새로고침</button>
+        <a class="nv" href="/">신청 페이지</a>
+        <button type="button" class="btn small danger" id="logoutBtn" style="cursor: pointer">🔒 로그아웃</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap adm-body">
+    <div class="adm-sec">
+      <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px">
+        <h2>Google 스프레드시트 신청자 목록</h2>
+        <span class="muted" style="font-size: 14px">관리자 화면에서 수정·삭제 시 구글 시트의 해당 행이 즉시 업데이트됩니다.</span>
+      </div>
+      <div class="toolbar">
+        <label for="q" class="sr">이름, 연락처, 이메일 검색</label>
+        <input id="q" class="inp grow" type="search" placeholder="이름·연락처·이메일 검색">
+        <label for="pf" class="sr">플랫폼 필터</label>
+        <select id="pf" class="inp"></select>
+        <button type="button" class="btn small" id="addBtn">+ 신청자 추가</button>
+        <button type="button" class="btn small danger" id="delSel" disabled>선택 삭제</button>
+        <button type="button" class="btn small danger" id="delAll">전체 삭제</button>
+        <button type="button" class="btn small paper" id="csvBtn">CSV 전체 다운로드</button>
+        <span class="count" id="countAdm" aria-live="polite"></span>
+      </div>
+      <div class="tbl-wrap">
+        <table class="adm">
+          <thead>
+            <tr>
+              <th style="width: 44px"><label class="sr" for="selAll">전체 선택</label><input type="checkbox" id="selAll"></th>
+              <th>번호</th><th>이름</th><th>연락처</th><th>이메일</th><th>플랫폼</th><th>신청 시각</th><th>수정 시각</th><th>관리</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="adm-sec">
+      <h2>사전예약 상태</h2>
+      <div class="setrow">
+        <input type="checkbox" id="forceClosed">
+        <label for="forceClosed">마감 상태로 전환 (신청 페이지에 마감 상태 적용)</label>
+      </div>
+    </div>
+
+    <div class="adm-sec">
+      <h2>Google 스프레드시트 연동 설정</h2>
+      <div class="card" style="padding: 18px; display: flex; flex-direction: column; gap: 12px; background: #fff">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px">
+          <div>
+            <b>연동 스프레드시트:</b> <span id="currentSheetText" class="muted">확인 중...</span>
+          </div>
+          <div style="display: flex; gap: 8px">
+            <button type="button" class="btn small paper" id="copySheetIdBtn">시트 ID 복사</button>
+            <button type="button" class="btn small paper" id="resetSheetBtn">새 시트로 교체</button>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap; align-items: center">
+          <label for="customSheetInput" class="sr">구글 시트 URL 또는 ID</label>
+          <input id="customSheetInput" class="inp" type="text" placeholder="기존 구글 시트 전체 URL 또는 스프레드시트 ID 붙여넣기" style="flex: 1 1 320px; min-height: 40px">
+          <button type="button" class="btn small" id="applyCustomSheetBtn">시트 직접 연결</button>
+        </div>
+        <div id="sheetStatusMsg" class="muted" style="font-size: 13px"></div>
+      </div>
+    </div>
+
+    <div class="adm-sec">
+      <h2>Google 스프레드시트 피드백 메모</h2>
+      <ul class="memos" id="memoList"></ul>
+    </div>
+  </div>
+</div>
+
+<!-- 추가/수정 다이얼로그 -->
+<dialog id="dlg" aria-labelledby="dlgTitle">
+  <form id="dlgForm" novalidate method="dialog">
+    <h3 id="dlgTitle">신청 정보 수정</h3>
+    <p class="muted" id="dlgHelp" style="margin: 0; font-size: 14px"></p>
+    <div class="field">
+      <label for="d-name" class="lbl">이름</label>
+      <input id="d-name" class="inp" type="text" maxlength="20" autocomplete="off">
+      <div class="err" id="de-name"></div>
+    </div>
+    <div class="field">
+      <label for="d-phone" class="lbl">연락처</label>
+      <input id="d-phone" class="inp" type="tel" inputmode="numeric" placeholder="010-0000-0000" autocomplete="off">
+      <div class="err" id="de-phone"></div>
+    </div>
+    <div class="field">
+      <label for="d-email" class="lbl">이메일</label>
+      <input id="d-email" class="inp" type="email" autocomplete="off">
+      <div class="err" id="de-email"></div>
+    </div>
+    <div class="field">
+      <label for="d-plat" class="lbl">플랫폼</label>
+      <select id="d-plat" class="inp"></select>
+      <div class="err" id="de-plat"></div>
+    </div>
+    <div class="row">
+      <button type="button" class="btn small paper" id="dlgCancel">취소</button>
+      <button type="button" class="btn small" id="dlgSave">시트에 저장</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- CSV 다운로드 다이얼로그 -->
+<dialog id="expDlg" aria-labelledby="expTitle" style="max-width: 560px">
+  <div style="padding: 24px; display: flex; flex-direction: column; gap: 14px">
+    <h3 id="expTitle" style="margin: 0">CSV 전체 다운로드</h3>
+    <p style="margin: 0" id="expInfo"></p>
+    <div class="alert">Google 스프레드시트의 원본 데이터(이름·연락처·이메일)로 내려받습니다. 안내 발송·추첨에만 사용하고 안전하게 관리해 주세요.</div>
+    <div style="font-size: 14px; line-height: 1.7">
+      <div><b>파일에 들어가는 항목</b></div>
+      <div>번호(신청 순서) · 이름 · 연락처 · 이메일 · 주 이용 플랫폼 · 개인정보 동의 · 신청 일시 · 최종 수정 일시</div>
+    </div>
+    <p id="expDone" class="muted" style="margin: 0; font-size: 14px" aria-live="polite" hidden></p>
+    <details id="expFallback" hidden>
+      <summary style="cursor: pointer; font-weight: 700">다운로드가 안 될 때</summary>
+      <p class="muted" style="font-size: 13px; margin: 8px 0">아래 내용을 모두 복사해 메모장에 붙여 넣고 <b>.csv</b>로 저장하면 엑셀에서 열려요.</p>
+      <label for="expText" class="sr">CSV 내용</label>
+      <textarea id="expText" class="inp" readonly style="min-height: 120px; font-size: 13px; font-family: monospace"></textarea>
+    </details>
+    <div class="row">
+      <button type="button" class="btn small paper" id="expClose">닫기</button>
+      <button type="button" class="btn small" id="expGo">다운로드</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- 삭제 확인 다이얼로그 (Google Workspace 필수 요구사항 충족) -->
+<dialog id="cfm" aria-labelledby="cfmMsg">
+  <div style="padding: 24px; display: flex; flex-direction: column; gap: 16px">
+    <h3 style="margin: 0; color: var(--err)">Google 스프레드시트 데이터 삭제 확인</h3>
+    <p id="cfmMsg" style="margin: 0; font-weight: 700"></p>
+    <div class="row">
+      <button type="button" class="btn small paper" id="cfmNo">취소</button>
+      <button type="button" class="btn small danger" id="cfmYes">삭제 실행</button>
+    </div>
+  </div>
+</dialog>
+
+<script type="module" src="/src/admin.ts"></script>
+</body>
+</html>

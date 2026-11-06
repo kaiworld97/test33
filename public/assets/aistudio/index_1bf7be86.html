@@ -1,0 +1,912 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>루미나 아카디아 사전예약</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gugi&family=Press+Start+2P&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+  :root { --accent: #F7C948; --bg: #FFF1C2; --ink: #1B1A2E; --muted: #4A4868; --err: #B3261E; color-scheme: light; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Noto Sans KR', system-ui, sans-serif; line-height: 1.6; }
+  a { color: var(--ink); }
+  button { font: inherit; }
+  .px { font-family: 'Press Start 2P', 'Noto Sans KR', monospace; }
+  .gg { font-family: 'Gugi', 'Noto Sans KR', sans-serif; }
+  .muted { color: var(--muted); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding-left: clamp(20px, 5vw, 48px); padding-right: clamp(20px, 5vw, 48px); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 26px; border: 4px solid var(--ink); border-radius: 0; background: var(--accent); color: var(--ink); font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-size: 18px; text-decoration: none; cursor: pointer; box-shadow: 4px 4px 0 var(--ink); gap: 10px; }
+  .btn.paper { background: #fff; }
+  .btn.small { min-height: 40px; padding: 0 14px; font-size: 15px; border-width: 3px; box-shadow: 3px 3px 0 var(--ink); }
+  .btn.danger { background: #fff; color: var(--err); border-color: var(--err); box-shadow: 3px 3px 0 var(--err); }
+  .btn:hover:not([disabled]) { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+  .btn.small:hover:not([disabled]) { box-shadow: 5px 5px 0 var(--ink); }
+  .btn:active:not([disabled]) { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--ink); }
+  .btn[disabled] { background: #d8d4e6; color: #6b6985; cursor: not-allowed; box-shadow: none; }
+  .btn:focus-visible, .nv:focus-visible, .chip:focus-visible, .car-btn:focus-visible, .pbtn:focus-visible, .inp:focus-visible, input[type=checkbox]:focus-visible, textarea:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  .nv { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 3px solid var(--ink); background: #fff; color: var(--ink); font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-size: 15px; text-decoration: none; box-shadow: 3px 3px 0 var(--ink); }
+  .nv:hover { background: var(--accent); }
+  .nv.quiet { box-shadow: none; border-style: dashed; background: transparent; }
+  .card { background: #fff; border: 4px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); }
+  .no { display: inline-block; background: var(--ink); color: var(--accent); padding: 9px 10px 7px; font-family: 'Press Start 2P', monospace; font-size: 13px; }
+  .sec-t { margin: 0; font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-size: clamp(28px, 4.5vw, 44px); font-weight: 400; line-height: 1.2; }
+  .dots { height: 8px; background: repeating-linear-gradient(90deg, var(--ink) 0 8px, transparent 8px 16px); }
+  .sec { padding-top: clamp(56px, 8vw, 96px); display: flex; flex-direction: column; gap: 28px; }
+  .sec-head { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .slot { width: 96px; height: 96px; flex: none; border: 4px solid var(--ink); display: flex; align-items: center; justify-content: center; box-shadow: inset -6px -6px 0 rgba(27,26,46,.25); position: relative; overflow: hidden; background: var(--c); }
+  .slot::after { content: ""; position: absolute; top: 0; left: -30%; width: 14px; height: 100%; background: rgba(255,255,255,.6); transform: skewX(-20deg); animation: shine 2.8s steps(10) infinite; }
+  .slot svg { animation: bob 1.6s steps(4) infinite; }
+
+  .inp { min-height: 48px; padding: 0 14px; border: 4px solid var(--ink); border-radius: 0; background: #fff; color: var(--ink); font-family: inherit; font-size: 16px; width: 100%; }
+  textarea.inp { padding: 10px 14px; min-height: 96px; resize: vertical; }
+  .inp.bad { border-color: var(--err); }
+  .chip { min-height: 48px; padding: 0 18px; border: 4px solid var(--ink); border-radius: 0; background: #fff; color: var(--ink); font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-size: 15px; cursor: pointer; box-shadow: 3px 3px 0 var(--ink); }
+  .chip:hover { background: var(--bg); }
+  .chip.on { background: var(--accent); transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
+  .err { font-size: 14px; color: var(--err); font-weight: 700; }
+  .alert { padding: 12px 14px; border: 3px solid var(--err); background: #fff; color: var(--err); font-weight: 700; font-size: 15px; }
+  .alert.info { border-color: var(--ink); color: var(--ink); background: var(--accent); }
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .lbl { font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-size: 16px; }
+
+  /* 상단 */
+  .topbar { padding-top: 20px; padding-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo span { font-size: 22px; }
+  nav { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  /* 캐러셀 */
+  .car { --sw: clamp(300px, 31vw, 600px); --sh: calc(var(--sw) * .85); position: relative; width: 100%; height: var(--sh); overflow: hidden; }
+  .slide { position: absolute; top: 0; left: 50%; width: var(--sw); height: 100%; margin-left: calc(var(--sw) / -2); transition: transform .6s cubic-bezier(.22,.61,.36,1); }
+  .slide.jump { transition: none; }
+  .slide-in { position: absolute; top: 0; bottom: 0; left: 6px; right: 6px; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; padding: 0 20px 28px; border: 4px solid var(--ink); }
+  .slide-in::before { content: ""; position: absolute; top: 14px; left: 16px; width: 4px; height: 4px; background: #fff; box-shadow: 46px 26px 0 #fff, 92px 8px 0 #F7C948, 148px 34px 0 #fff, 210px 14px 0 #fff, 260px 40px 0 #F7C948, 18px 64px 0 #fff, 300px 10px 0 #fff, 340px 52px 0 #fff, 400px 18px 0 #F7C948; }
+  .b0 .slide-in { background: #2B2D5B; } .b1 .slide-in { background: #3B2A58; } .b2 .slide-in { background: #1F4D5C; } .b3 .slide-in { background: #5B2A3A; } .b4 .slide-in { background: #4A3B1F; }
+  .dim { position: absolute; inset: 0; background: var(--ink); opacity: .55; transition: opacity .6s; }
+  .slide.cur .dim { opacity: 0; } .slide.far .dim { opacity: .78; }
+  .art { position: absolute; top: 9%; left: 50%; width: calc(var(--sw) * .3); height: auto; transform: translateX(-50%); }
+  .sl-eyebrow { font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-size: 14px; color: #F7C948; margin-bottom: 6px; }
+  .sl-title { margin: 0; font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-weight: 400; font-size: clamp(22px, calc(var(--sw) * .075), 34px); line-height: 1.25; color: #fff; }
+  .sl-sub { margin: 8px 0 0; font-size: clamp(14px, calc(var(--sw) * .04), 17px); color: #E9E6FF; }
+  .car-btn { position: absolute; top: 50%; margin-top: -24px; width: 48px; height: 48px; border: 3px solid var(--ink); border-radius: 0; background: #fff; color: var(--ink); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 3; box-shadow: 3px 3px 0 var(--ink); }
+  .car-btn.prev { left: calc(50% - var(--sw) / 2 + 18px); } .car-btn.next { left: calc(50% + var(--sw) / 2 - 66px); }
+  .car-btn:hover, .pbtn:hover { background: var(--accent); }
+  .pbtn { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border: 3px solid var(--ink); border-radius: 0; background: #fff; color: var(--ink); cursor: pointer; box-shadow: 3px 3px 0 var(--ink); }
+
+  /* 혜택 카드 */
+  #rewards .card { position: relative; padding: 36px 24px 24px; box-shadow: 8px 8px 0 var(--ink), inset 0 12px 0 var(--c); transition: transform .15s steps(3), box-shadow .15s steps(3); display: flex; flex-direction: column; gap: 16px; flex: 1 1 280px; min-width: 0; }
+  #rewards .card:nth-child(1) { --c: #9B7BFF; background: #EDE6FF; }
+  #rewards .card:nth-child(2) { --c: #3CCFB4; background: #D9F7EE; }
+  #rewards .card:nth-child(3) { --c: #FF7A59; background: #FFE3D8; }
+  #rewards .card:hover { transform: translate(-4px, -4px); box-shadow: 12px 12px 0 var(--ink), inset 0 12px 0 var(--c); }
+  #rewards .card .px { align-self: flex-start; background: var(--c); border: 3px solid var(--ink); padding: 4px 8px 2px; font-size: 11px; }
+  #rewards .card:nth-child(2) .slot svg { animation-delay: .4s; } #rewards .card:nth-child(3) .slot svg { animation-delay: .8s; }
+  #rewards .card:nth-child(2) .slot::after { animation-delay: .9s; } #rewards .card:nth-child(3) .slot::after { animation-delay: 1.8s; }
+
+  /* 폼 */
+  .formbar { background: var(--ink); padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
+  .formbar i { width: 10px; height: 10px; background: #fff; display: block; }
+  .formbar i:first-child { background: var(--accent); }
+  .terms { padding: 14px 16px; border: 3px solid var(--ink); background: var(--bg); font-size: 14px; line-height: 1.7; }
+  .agree { display: flex; align-items: center; gap: 12px; min-height: 44px; font-size: 15px; cursor: pointer; }
+  .agree input { width: 24px; height: 24px; accent-color: var(--ink); flex: none; }
+  .loadbar { display: inline-block; width: 64px; height: 12px; border: 3px solid var(--ink); background: #fff; position: relative; overflow: hidden; }
+  .loadbar::after { content: ""; position: absolute; top: 0; bottom: 0; width: 18px; background: var(--ink); animation: load .7s steps(4) infinite; }
+  @keyframes load { from { left: -18px; } to { left: 64px; } }
+  @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+  @keyframes shine { 0% { left: -30%; } 60%, 100% { left: 130%; } }
+
+  footer.site { background: var(--ink); color: #E9E6FF; margin-top: 0; }
+  footer.site .wrap { padding-top: 28px; padding-bottom: 28px; font-size: 14px; display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+  footer.site a { color: #E9E6FF; }
+
+  /* 관리자: 블록 대신 한 줄짜리 표 */
+  .gate { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+  .gate .card { width: 100%; max-width: 420px; padding: 28px; display: flex; flex-direction: column; gap: 18px; }
+  .adm-top { background: var(--ink); color: #fff; }
+  .adm-top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; min-height: 64px; }
+  .adm-top a.nv { box-shadow: none; }
+  .adm-body { padding-top: 28px; padding-bottom: 64px; display: flex; flex-direction: column; gap: 20px; }
+  .toolbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .toolbar .inp { min-height: 44px; border-width: 3px; width: auto; }
+  .toolbar .grow { flex: 1 1 220px; }
+  .count { font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-size: 16px; margin-left: auto; }
+  .tbl-wrap { overflow-x: auto; border: 4px solid var(--ink); background: #fff; }
+  table.adm { border-collapse: collapse; width: 100%; min-width: 900px; font-size: 15px; }
+  table.adm th { background: var(--ink); color: #fff; text-align: left; padding: 10px 12px; font-weight: 700; white-space: nowrap; }
+  table.adm td { padding: 10px 12px; border-top: 2px solid #d9d4ee; white-space: nowrap; }
+  table.adm tbody tr:hover { background: #fff8dc; }
+  table.adm td.empty { text-align: center; color: var(--muted); padding: 32px 12px; white-space: normal; }
+  table.adm td.acts { display: flex; gap: 8px; }
+  table.adm input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--ink); }
+  .adm-sec { display: flex; flex-direction: column; gap: 10px; }
+  .adm-sec h2 { margin: 0; font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-weight: 400; font-size: 22px; }
+  .setrow { display: flex; align-items: center; gap: 12px; min-height: 44px; }
+  .setrow input { width: 22px; height: 22px; accent-color: var(--ink); }
+  ul.memos { list-style: none; margin: 0; padding: 0; border: 4px solid var(--ink); background: #fff; }
+  ul.memos li { display: flex; gap: 12px; align-items: flex-start; padding: 10px 12px; border-top: 2px solid #d9d4ee; }
+  ul.memos li:first-child { border-top: 0; }
+  ul.memos li .t { flex: none; color: var(--muted); font-size: 13px; padding-top: 3px; white-space: nowrap; }
+  ul.memos li .x { flex: 1; white-space: pre-wrap; word-break: break-word; }
+  ul.memos li.empty { color: var(--muted); }
+
+  dialog { border: 4px solid var(--ink); padding: 0; max-width: 460px; width: calc(100% - 32px); color: var(--ink); background: #fff; }
+  dialog::backdrop { background: rgba(27, 26, 46, .65); }
+  dialog form { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+  dialog h3 { margin: 0; font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-weight: 400; font-size: 22px; }
+  .row { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
+  .sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; padding: 0; }
+
+  @media (max-width: 1000px) { .car { --sw: 60vw; } }
+  @media (max-width: 700px) { .car { --sw: 78vw; --sh: calc(var(--sw) * 1.05); } .count { margin-left: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .slide, .dim, #rewards .card { transition: none; }
+    .slot::after, .slot svg, .loadbar::after { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 픽셀 아트 정의 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <g id="i-intro"><path fill="#0E0D1C" d="M3 0h6v1H3z M2 1h1v1H2z M9 1h1v1H9z M1 2h1v1H1z M10 2h1v1h-1z M0 3h1v2H0z M11 3h1v2h-1z M1 5h1v1H1z M10 5h1v1h-1z M2 6h1v1H2z M9 6h1v1H9z M3 7h1v1H3z M8 7h1v1H8z M4 8h1v1H4z M7 8h1v1H7z M5 9h2v1H5z"/><path fill="#5BE0D0" d="M3 1h6v1H3z M2 2h8v1H2z M1 3h10v2H1z M2 5h8v1H2z M3 6h6v1H3z M4 7h4v1H4z M5 8h2v1H5z"/><path fill="#D9FFF8" d="M3 1h2v1H3z M6 1h1v1H6z M2 2h1v1H2z M2 3h1v1H2z"/><path fill="#2A9D8F" d="M7 3h4v2H7z M6 5h4v1H6z M6 6h3v1H6z M6 7h2v1H6z M6 8h1v1H6z"/></g>
+    <g id="i-schedule"><path fill="#0E0D1C" d="M0 1h12v1H0z M0 2h1v9H0z M11 2h1v9h-1z M0 11h12v1H0z"/><path fill="#E8553D" d="M1 2h10v2H1z"/><path fill="#FFFFFF" d="M1 4h10v7H1z"/><path fill="#0E0D1C" d="M3 0h1v3H3z M8 0h1v3H8z M2 5h2v1H2z M5 5h2v1H5z M8 5h2v1H8z M2 7h2v1H2z M5 7h2v1H5z M2 9h2v1H2z M8 9h2v1H8z"/><path fill="#F7C948" d="M8 7h2v1H8z M5 9h2v1H5z"/></g>
+    <g id="i-skin"><path fill="#0E0D1C" d="M5 0h4v3H5z M5 1h4v3H5z M4 2h6v3H4z M0 3h14v3H0z M1 4h12v3H1z M2 5h10v3H2z M3 6h8v3H3z M2 7h5v3H2z M7 7h5v3H7z M1 8h5v3H1z M8 8h5v3H8z"/><path fill="#F7C948" d="M6 1h2v1H6z M6 2h2v1H6z M5 3h4v1H5z M1 4h12v1H1z M2 5h10v1H2z M3 6h8v1H3z M4 7h6v1H4z M3 8h3v1H3z M8 8h3v1H8z M2 9h3v1H2z M9 9h3v1H9z"/><path fill="#FFE48A" d="M6 2h1v1H6z M2 4h3v1H2z M3 5h1v1H3z"/></g>
+    <g id="i-coupon"><path fill="#0E0D1C" d="M3 0h6v3H3z M2 1h8v3H2z M1 2h10v3H1z M0 3h12v3H0z M0 4h12v3H0z M0 5h12v3H0z M0 6h12v3H0z M1 7h10v3H1z M2 8h8v3H2z M3 9h6v3H3z"/><path fill="#F7C948" d="M4 1h4v1H4z M3 2h6v1H3z M2 3h8v1H2z M1 4h10v1H1z M1 5h10v1H1z M1 6h10v1H1z M1 7h10v1H1z M2 8h8v1H2z M3 9h6v1H3z M4 10h4v1H4z"/><path fill="#C98F1B" d="M5 4h2v5H5z"/><path fill="#FFE48A" d="M3 3h1v2H3z"/></g>
+    <g id="i-goods"><path fill="#0E0D1C" d="M2 0h4v3H2z M6 0h4v3H6z M1 1h6v3H1z M5 1h6v3H5z M3 2h6v3H3z M0 3h12v3H0z M0 4h12v3H0z M1 5h10v7H1z"/><path fill="#E8553D" d="M2 6h8v5H2z"/><path fill="#FF8A6B" d="M1 4h10v2H1z"/><path fill="#FFE48A" d="M3 1h2v1H3z M7 1h2v1H7z M2 2h4v1H2z M6 2h4v1H6z M4 3h4v1H4z"/><path fill="#F7C948" d="M5 4h2v7H5z"/></g>
+  </defs>
+</svg>
+
+<!-- ============ 사전예약 페이지 ============ -->
+<div id="viewPublic">
+
+  <header class="wrap topbar">
+    <div class="logo">
+      <svg width="36" height="30" viewBox="0 0 12 10" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-intro"/></svg>
+      <span class="gg">루미나 아카디아</span>
+    </div>
+    <nav aria-label="페이지 이동">
+      <a class="nv" href="#schedule">일정</a>
+      <a class="nv" href="#rewards">혜택</a>
+      <a class="nv" href="#reserve">사전예약</a>
+      <a class="nv quiet" href="#admin">관리자</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1 class="sr">루미나 아카디아 사전예약</h1>
+
+    <div style="padding-top: clamp(8px, 2vw, 24px)">
+      <div class="car" role="region" aria-roledescription="carousel" aria-label="루미나 아카디아 사전예약 안내" id="car">
+        <div class="slide" role="group" aria-roledescription="slide" aria-label="1 / 5"><div class="slide-in"><svg class="art" viewBox="0 0 12 10" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-intro"/></svg><div class="sl-eyebrow">사전예약 진행 중</div><h2 class="sl-title">루미나 아카디아</h2><p class="sl-sub">꺼져 가는 빛의 도시를 다시 밝히는 판타지 모험</p></div><div class="dim"></div></div>
+        <div class="slide" role="group" aria-roledescription="slide" aria-label="2 / 5"><div class="slide-in"><svg class="art" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-schedule"/></svg><div class="sl-eyebrow">출시 일정</div><h2 class="sl-title">출시 전 사전예약 마감</h2><p class="sl-sub" id="slSched"></p></div><div class="dim"></div></div>
+        <div class="slide" role="group" aria-roledescription="slide" aria-label="3 / 5"><div class="slide-in"><svg class="art" viewBox="0 0 14 12" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-skin"/></svg><div class="sl-eyebrow">혜택 01</div><h2 class="sl-title">한정판 스킨</h2><p class="sl-sub">사전예약자만 받을 수 있는 한정판 스킨</p></div><div class="dim"></div></div>
+        <div class="slide" role="group" aria-roledescription="slide" aria-label="4 / 5"><div class="slide-in"><svg class="art" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-coupon"/></svg><div class="sl-eyebrow">혜택 02</div><h2 class="sl-title">인게임 재화 쿠폰</h2><p class="sl-sub">출시 첫날 바로 쓰는 인게임 재화 쿠폰</p></div><div class="dim"></div></div>
+        <div class="slide" role="group" aria-roledescription="slide" aria-label="5 / 5"><div class="slide-in"><svg class="art" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-goods"/></svg><div class="sl-eyebrow">혜택 03</div><h2 class="sl-title">실물 굿즈 추첨</h2><p class="sl-sub">사전예약 참여자 중 추첨으로 실물 굿즈 증정</p></div><div class="dim"></div></div>
+        <button type="button" class="car-btn prev" id="carPrev" aria-label="이전 배너"><svg width="18" height="30" viewBox="0 0 6 10" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="M4 0h2v1H4z M3 1h2v1H3z M2 2h2v1H2z M1 3h2v1H1z M0 4h2v2H0z M1 6h2v1H1z M2 7h2v1H2z M3 8h2v1H3z M4 9h2v1H4z"/></svg></button>
+        <button type="button" class="car-btn next" id="carNext" aria-label="다음 배너"><svg width="18" height="30" viewBox="0 0 6 10" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="M0 0h2v1H0z M1 1h2v1H1z M2 2h2v1H2z M3 3h2v1H3z M4 4h2v2H4z M3 6h2v1H3z M2 7h2v1H2z M1 8h2v1H1z M0 9h2v1H0z"/></svg></button>
+      </div>
+
+      <div style="display: flex; justify-content: center; align-items: center; gap: 10px; padding-top: 28px">
+        <div class="px" style="display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 16px; border: 3px solid var(--ink); background: #fff; font-size: 13px; box-shadow: 3px 3px 0 var(--ink)"><span id="curNo">01</span><span class="muted">/ 05</span></div>
+        <button type="button" class="pbtn" id="carPlay" aria-label="자동 재생 일시정지">
+          <svg id="icoPause" width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="M1 0h2v8H1z M5 0h2v8H5z"/></svg>
+          <svg id="icoPlay" width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true" hidden><path d="M1 0h2v8H1z M3 1h2v6H3z M5 2h2v4H5z"/></svg>
+        </button>
+      </div>
+
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 32px clamp(20px, 5vw, 48px) 0; text-align: center">
+        <div class="gg" style="display: inline-flex; align-items: center; gap: 10px; padding: 6px 14px; border: 3px solid var(--ink); background: var(--accent); font-size: 14px" aria-live="polite">
+          <span style="width: 8px; height: 8px; background: var(--ink)"></span>
+          <span id="statusText">사전예약 진행 중</span>
+          <span aria-hidden="true">·</span>
+          <span>지금까지 <b id="countPub">0</b>명 신청</span>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center">
+          <a href="#reserve" class="btn">사전예약 하기</a>
+          <a href="#rewards" class="btn paper">혜택 보기</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 01 출시 일정 -->
+    <section id="schedule" class="wrap sec" aria-labelledby="t-sched">
+      <div class="sec-head"><span class="no">01 /</span><h2 class="sec-t" id="t-sched">출시 일정 한눈에</h2></div>
+      <div class="dots"></div>
+      <div style="display: flex; flex-wrap: wrap; gap: 28px">
+        <div class="card" style="flex: 1 1 240px; min-width: 0; padding: 22px 24px; display: flex; flex-direction: column; gap: 8px">
+          <div class="px" style="font-size: 11px">STEP 01</div>
+          <div class="gg" style="font-size: 22px">사전예약 시작</div>
+          <div class="muted" id="dOpen"></div>
+        </div>
+        <div class="card" style="flex: 1 1 240px; min-width: 0; padding: 22px 24px; display: flex; flex-direction: column; gap: 8px; background: var(--accent)">
+          <div class="px" style="font-size: 11px">STEP 02 · 출시 전 마감</div>
+          <div class="gg" style="font-size: 22px">사전예약 마감</div>
+          <div id="dClose" style="font-weight: 700"></div>
+          <div class="px" id="dday" style="font-size: 13px"></div>
+        </div>
+        <div class="card" style="flex: 1 1 240px; min-width: 0; padding: 22px 24px; display: flex; flex-direction: column; gap: 8px">
+          <div class="px" style="font-size: 11px">STEP 03</div>
+          <div class="gg" style="font-size: 22px">정식 출시</div>
+          <div class="muted" id="dLaunch"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 혜택 -->
+    <section id="rewards" class="wrap sec" aria-labelledby="t-rew">
+      <div class="sec-head"><span class="no">02 /</span><h2 class="sec-t" id="t-rew">사전예약 혜택 3가지</h2></div>
+      <div class="dots"></div>
+      <p class="muted" style="margin: 0">사전예약 신청만 하면 모두 받을 수 있어요. 실물 굿즈는 추첨으로 제공됩니다.</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 28px">
+        <div class="card"><div class="slot"><svg width="64" height="55" viewBox="0 0 14 12" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-skin"/></svg></div><div class="px">REWARD 01</div><h3 class="gg" style="margin: 0; font-size: 24px; font-weight: 400">한정판 스킨</h3><p class="muted" style="margin: 0">사전예약자만 받을 수 있는 한정판 스킨을 출시와 함께 드려요.</p></div>
+        <div class="card"><div class="slot"><svg width="60" height="60" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-coupon"/></svg></div><div class="px">REWARD 02</div><h3 class="gg" style="margin: 0; font-size: 24px; font-weight: 400">인게임 재화 쿠폰</h3><p class="muted" style="margin: 0">출시 첫날 바로 쓸 수 있는 인게임 재화 쿠폰을 지급해요.</p></div>
+        <div class="card"><div class="slot"><svg width="60" height="60" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-goods"/></svg></div><div class="px">REWARD 03</div><h3 class="gg" style="margin: 0; font-size: 24px; font-weight: 400">실물 굿즈 추첨</h3><p class="muted" style="margin: 0">사전예약 참여자 중 추첨을 통해 실물 굿즈를 보내 드려요.</p></div>
+      </div>
+    </section>
+
+    <!-- 03 사전예약 -->
+    <section id="reserve" class="wrap sec" style="padding-bottom: clamp(64px, 9vw, 112px)" aria-labelledby="t-res">
+      <div style="display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start">
+        <div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+          <span class="no" style="align-self: flex-start">03 /</span>
+          <h2 class="sec-t" id="t-res">지금 사전예약하고<br>출시 첫날 혜택을 받으세요</h2>
+          <p style="margin: 0">사전예약은 정식 출시 전에 마감돼요. 마감일은 <b id="dClose2"></b> 입니다.</p>
+          <p class="muted" style="margin: 0; font-size: 14px">로그인이나 결제 없이 이름, 연락처, 이메일만으로 신청할 수 있어요. 같은 연락처나 같은 이메일로는 한 번만 신청할 수 있어요.</p>
+        </div>
+
+        <div class="card" style="flex: 1 1 400px; min-width: 0">
+          <div class="formbar"><i></i><i></i><i></i><span class="px" style="margin-left: auto; font-size: 11px; color: #fff">PRE-REGISTER</span></div>
+          <div style="padding: clamp(22px, 4vw, 34px)">
+
+            <form id="form" novalidate style="display: flex; flex-direction: column; gap: 22px">
+              <div class="alert info" id="closedBox" role="alert" hidden>사전예약이 마감되었어요. 다음 소식을 기다려 주세요.</div>
+              <div class="alert" id="formAlert" role="alert" hidden></div>
+              <div class="alert info" id="storeWarn" hidden>이 브라우저에서는 저장 공간을 쓸 수 없어요. 새로고침하면 신청 내역이 사라져요.</div>
+
+              <div class="field">
+                <label for="f-name" class="lbl">이름</label>
+                <input id="f-name" class="inp" type="text" maxlength="20" placeholder="이름을 입력하세요" autocomplete="off" aria-describedby="e-name">
+                <div class="err" id="e-name" aria-live="polite"></div>
+              </div>
+
+              <div class="field">
+                <label for="f-phone" class="lbl">연락처</label>
+                <input id="f-phone" class="inp" type="tel" inputmode="numeric" placeholder="010-0000-0000" autocomplete="off" aria-describedby="e-phone">
+                <div class="err" id="e-phone" aria-live="polite"></div>
+              </div>
+
+              <div class="field">
+                <label for="f-email" class="lbl">이메일</label>
+                <input id="f-email" class="inp" type="email" placeholder="name@example.com" autocomplete="off" aria-describedby="e-email">
+                <div class="err" id="e-email" aria-live="polite"></div>
+              </div>
+
+              <div class="field" style="gap: 12px">
+                <div id="f-platform-label" class="lbl">주 이용 플랫폼</div>
+                <div role="group" aria-labelledby="f-platform-label" id="platforms" style="display: flex; flex-wrap: wrap; gap: 12px"></div>
+                <div class="err" id="e-platform" aria-live="polite"></div>
+              </div>
+
+              <div class="field" style="gap: 10px">
+                <div class="terms">
+                  <div>수집 항목: 이름, 연락처, 이메일, 주 이용 플랫폼</div>
+                  <div>이용 목적: 사전예약 혜택 지급, 굿즈 추첨, 출시 안내</div>
+                  <div>보유 기간: 혜택 지급이 끝난 뒤 파기 (예시)</div>
+                </div>
+                <label for="f-agree" class="agree"><input id="f-agree" type="checkbox" aria-describedby="e-agree"><span>개인정보 수집·이용에 동의합니다. (필수)</span></label>
+                <div class="err" id="e-agree" aria-live="polite"></div>
+              </div>
+
+              <button type="button" class="btn" id="submitBtn" style="width: 100%"><span id="submitLabel">사전예약 신청하기</span></button>
+            </form>
+
+            <div id="done" role="status" style="display: flex; flex-direction: column; gap: 16px; align-items: flex-start" hidden>
+              <svg width="72" height="60" viewBox="0 0 12 10" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-intro"/></svg>
+              <h3 class="gg" style="margin: 0; font-size: 28px; font-weight: 400">사전예약이 완료되었어요</h3>
+              <p style="margin: 0" id="doneText"></p>
+              <div style="padding: 12px 16px; border: 3px solid var(--ink); background: var(--accent); font-weight: 700; width: 100%" id="donePlat"></div>
+              <button type="button" class="btn paper" id="againBtn">다른 연락처로 신청하기</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 한마디 -->
+      <div style="margin-top: 56px; max-width: 640px; display: flex; flex-direction: column; gap: 12px">
+        <h3 class="gg" style="margin: 0; font-size: 22px; font-weight: 400">신청하면서 불편했던 점이 있나요?</h3>
+        <label for="memo" class="sr">피드백 메모</label>
+        <textarea id="memo" class="inp" maxlength="300" placeholder="예: 중복 안내 문구가 헷갈렸어요"></textarea>
+        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap">
+          <button type="button" class="btn small paper" id="memoBtn">메모 남기기</button>
+          <span class="muted" id="memoMsg" style="font-size: 14px" aria-live="polite"></span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site">
+    <div class="wrap">
+      <span>© 루미나 아카디아</span>
+      <span>수업용 가상 게임이에요. 일정·혜택은 예시이고, 입력한 내용은 이 브라우저에만 저장돼요.</span>
+    </div>
+  </footer>
+</div>
+
+<!-- ============ 관리자: 비밀번호 화면 ============ -->
+<div id="viewGate" class="gate" hidden>
+  <form class="card" id="gateForm" novalidate>
+    <h1 class="gg" style="margin: 0; font-size: 30px; font-weight: 400; text-align: center">관리자</h1>
+    <p class="muted" style="margin: 0; text-align: center">관리자 비밀번호를 입력해 주세요.</p>
+    <div class="field">
+      <label for="g-pw" class="lbl">비밀번호</label>
+      <input id="g-pw" class="inp" type="password" autocomplete="off" aria-describedby="e-pw">
+      <div class="err" id="e-pw" aria-live="polite"></div>
+    </div>
+    <button type="button" class="btn" id="gateBtn">입장</button>
+    <p class="muted" id="gateHint" style="margin: 0; font-size: 13px; text-align: center" hidden></p>
+    <a href="#reserve" style="text-align: center; font-size: 15px">← 사전예약 화면으로</a>
+  </form>
+</div>
+
+<!-- ============ 관리자: 신청 관리 ============ -->
+<div id="viewAdmin" hidden>
+  <div class="adm-top">
+    <div class="wrap">
+      <strong class="gg" style="font-size: 20px; font-weight: 400">루미나 아카디아 · 신청 관리</strong>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap">
+        <a class="nv" href="#reserve">사전예약 화면</a>
+        <button type="button" class="nv" id="logoutBtn" style="cursor: pointer">나가기</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap adm-body">
+    <div class="adm-sec">
+      <h2>신청 목록</h2>
+      <div class="toolbar">
+        <label for="q" class="sr">이름, 연락처, 이메일 검색</label>
+        <input id="q" class="inp grow" type="search" placeholder="이름·연락처·이메일 검색">
+        <label for="pf" class="sr">플랫폼 필터</label>
+        <select id="pf" class="inp"></select>
+        <button type="button" class="btn small" id="addBtn">+ 신청 추가</button>
+        <button type="button" class="btn small danger" id="delSel" disabled>선택 삭제</button>
+        <button type="button" class="btn small danger" id="delAll">전체 삭제</button>
+        <button type="button" class="btn small paper" id="csvBtn">CSV 전체 다운로드</button>
+        <span class="count" id="countAdm" aria-live="polite"></span>
+      </div>
+      <div class="tbl-wrap">
+        <table class="adm">
+          <thead>
+            <tr>
+              <th style="width: 44px"><label class="sr" for="selAll">전체 선택</label><input type="checkbox" id="selAll"></th>
+              <th>번호</th><th>이름</th><th>연락처</th><th>이메일</th><th>플랫폼</th><th>신청 시각</th><th>수정 시각</th><th>관리</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="adm-sec">
+      <h2>사전예약 상태</h2>
+      <div class="setrow">
+        <input type="checkbox" id="forceClosed">
+        <label for="forceClosed">마감 상태로 전환 (마감 화면 테스트용)</label>
+      </div>
+    </div>
+
+    <div class="adm-sec">
+      <h2>피드백 메모</h2>
+      <ul class="memos" id="memoList"></ul>
+    </div>
+  </div>
+</div>
+
+<!-- 추가/수정 -->
+<dialog id="dlg" aria-labelledby="dlgTitle">
+  <form id="dlgForm" novalidate method="dialog">
+    <h3 id="dlgTitle">신청 수정</h3>
+    <p class="muted" id="dlgHelp" style="margin: 0; font-size: 14px"></p>
+    <div class="field">
+      <label for="d-name" class="lbl">이름</label>
+      <input id="d-name" class="inp" type="text" maxlength="20" autocomplete="off">
+      <div class="err" id="de-name"></div>
+    </div>
+    <div class="field">
+      <label for="d-phone" class="lbl">연락처</label>
+      <input id="d-phone" class="inp" type="tel" inputmode="numeric" placeholder="010-0000-0000" autocomplete="off">
+      <div class="err" id="de-phone"></div>
+    </div>
+    <div class="field">
+      <label for="d-email" class="lbl">이메일</label>
+      <input id="d-email" class="inp" type="email" autocomplete="off">
+      <div class="err" id="de-email"></div>
+    </div>
+    <div class="field">
+      <label for="d-plat" class="lbl">플랫폼</label>
+      <select id="d-plat" class="inp"></select>
+      <div class="err" id="de-plat"></div>
+    </div>
+    <div class="row">
+      <button type="button" class="btn small paper" id="dlgCancel">취소</button>
+      <button type="button" class="btn small" id="dlgSave">저장</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="expDlg" aria-labelledby="expTitle" style="max-width: 560px">
+  <div style="padding: 24px; display: flex; flex-direction: column; gap: 14px">
+    <h3 id="expTitle" style="margin: 0">CSV 전체 다운로드</h3>
+    <p style="margin: 0" id="expInfo"></p>
+    <div class="alert">화면과 달리 이름·연락처·이메일이 가려지지 않은 원문으로 들어가요. 안내 발송·추첨에만 쓰고, 다 쓴 파일은 지워 주세요.</div>
+    <div style="font-size: 14px; line-height: 1.7">
+      <div><b>파일에 들어가는 항목</b></div>
+      <div>번호(신청 순서) · 이름 · 연락처 · 이메일 · 주 이용 플랫폼 · 개인정보 동의 · 신청 일시 · 최종 수정 일시</div>
+      <div class="muted">화면에만 있는 항목: 선택 칸, 수정·삭제 버튼</div>
+    </div>
+    <p id="expDone" class="muted" style="margin: 0; font-size: 14px" aria-live="polite" hidden></p>
+    <details id="expFallback" hidden>
+      <summary style="cursor: pointer; font-weight: 700">다운로드가 안 될 때</summary>
+      <p class="muted" style="font-size: 13px; margin: 8px 0">아래 내용을 모두 복사해 메모장에 붙여 넣고 <b>.csv</b>로 저장하면 엑셀에서 열려요.</p>
+      <label for="expText" class="sr">CSV 내용</label>
+      <textarea id="expText" class="inp" readonly style="min-height: 120px; font-size: 13px; font-family: monospace"></textarea>
+    </details>
+    <div class="row">
+      <button type="button" class="btn small paper" id="expClose">닫기</button>
+      <button type="button" class="btn small" id="expGo">다운로드</button>
+    </div>
+  </div>
+</dialog>
+
+<dialog id="cfm" aria-labelledby="cfmMsg">
+  <div style="padding: 24px; display: flex; flex-direction: column; gap: 16px">
+    <p id="cfmMsg" style="margin: 0; font-weight: 700"></p>
+    <div class="row">
+      <button type="button" class="btn small paper" id="cfmNo">취소</button>
+      <button type="button" class="btn small danger" id="cfmYes">삭제</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ---------- 설정 (여기만 고치면 일정·비밀번호가 바뀌어요) ---------- */
+  var CONFIG = {
+    requirePassword: true,                 // true: 비밀번호로만 관리자 입장 / false: 바로 입장
+    password: 'lumina2026',
+    showHint: false,                       // true로 바꾸면 입장 화면에 비밀번호를 알려 줘요(실습용)
+    openAt:  new Date(2026, 10, 6),        // 사전예약 시작  2026-11-06
+    closeAt: new Date(2026, 11, 15, 23, 59, 59), // 사전예약 마감  2026-12-15
+    launchAt: new Date(2026, 11, 17)       // 정식 출시      2026-12-17
+  };
+  var PLATFORMS = [
+    { id: 'ios', label: '모바일 iOS' },
+    { id: 'android', label: '모바일 Android' },
+    { id: 'pc', label: 'PC' },
+    { id: 'console', label: '콘솔' }
+  ];
+  var KEY = 'lumina-reservations';
+  var MKEY = 'lumina-feedback';
+  var CKEY = 'lumina-closed';
+  var AUTH = 'lumina-admin-ok';
+  var DAYS = ['일', '월', '화', '수', '목', '금', '토'];
+
+  var storageOk = true, mem = {}, adminMem = false, selectedPlat = '';
+
+  function $(id) { return document.getElementById(id); }
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function dateText(d) { return d.getFullYear() + '년 ' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일(' + DAYS[d.getDay()] + ')'; }
+  function stamp(iso) { if (!iso) return '-'; var d = new Date(iso); return pad(d.getMonth() + 1) + '/' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+  function platLabel(id) { for (var i = 0; i < PLATFORMS.length; i++) if (PLATFORMS[i].id === id) return PLATFORMS[i].label; return '-'; }
+
+  /* ---------- 저장소 (localStorage, 막혀도 화면은 동작) ---------- */
+  function read(key) {
+    if (!storageOk) return mem[key] || [];
+    try { var p = JSON.parse(window.localStorage.getItem(key) || '[]'); return Array.isArray(p) ? p : []; }
+    catch (e) { storageOk = false; $('storeWarn').hidden = false; return mem[key] || []; }
+  }
+  function write(key, arr) {
+    if (storageOk) { try { window.localStorage.setItem(key, JSON.stringify(arr)); return; } catch (e) { storageOk = false; $('storeWarn').hidden = false; } }
+    mem[key] = arr;
+  }
+  function isAuthed() { if (!CONFIG.requirePassword) return true; try { return window.sessionStorage.getItem(AUTH) === '1'; } catch (e) { return adminMem; } }
+  function setAuthed(v) { adminMem = v; try { if (v) window.sessionStorage.setItem(AUTH, '1'); else window.sessionStorage.removeItem(AUTH); } catch (e) {} }
+
+  /* ---------- 값 검사 ---------- */
+  function digits(v) { return String(v).replace(/\D/g, ''); }
+  function fmtPhone(d) {
+    d = d.slice(0, 11);
+    if (d.length > 7) return d.slice(0, 3) + '-' + d.slice(3, d.length - 4) + '-' + d.slice(-4);
+    if (d.length > 3) return d.slice(0, 3) + '-' + d.slice(3);
+    return d;
+  }
+  function isEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+  /* 관리자 화면 표시용 가리기: 김*자 / 010-****-2485 / ab***@mail.com */
+  function maskName(n) {
+    var c = Array.from(String(n || '')); if (c.length <= 1) return c.join('');
+    if (c.length === 2) return c[0] + '*';
+    return c[0] + '*'.repeat(c.length - 2) + c[c.length - 1];
+  }
+  function maskPhone(d) { d = String(d || ''); return d.length < 7 ? '-' : d.slice(0, 3) + '-****-' + d.slice(-4); }
+  function maskEmail(e) {
+    if (!e || e.indexOf('@') < 1) return '-';
+    var at = e.indexOf('@'), local = e.slice(0, at), keep = local.length <= 2 ? 1 : 2;
+    return local.slice(0, keep) + '*'.repeat(Math.max(local.length - keep, 3)) + e.slice(at);
+  }
+  function isPhone(d) { return /^01[016789]\d{7,8}$/.test(d); }
+  function closed() { return read(CKEY)[0] === 1 || new Date() > CONFIG.closeAt; }
+  function newId() { return 'r' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+  function setErr(id, msg) { var e = $('e-' + id); if (e) e.textContent = msg || ''; var i = $('f-' + id); if (i) { i.classList.toggle('bad', !!msg); i.setAttribute('aria-invalid', msg ? 'true' : 'false'); } }
+
+  /* ---------- 공개 페이지 ---------- */
+  function renderPublic() {
+    var list = read(KEY);
+    $('countPub').textContent = list.length;
+    var isClosed = closed();
+    $('statusText').textContent = isClosed ? '사전예약 마감' : '사전예약 진행 중';
+    $('closedBox').hidden = !isClosed;
+    $('submitBtn').disabled = isClosed;
+    $('submitLabel').textContent = isClosed ? '사전예약이 마감되었어요' : '사전예약 신청하기';
+    var today = new Date(); today = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    var diff = Math.round((new Date(CONFIG.closeAt.getFullYear(), CONFIG.closeAt.getMonth(), CONFIG.closeAt.getDate()) - today) / 864e5);
+    $('dday').textContent = isClosed ? '마감' : diff <= 0 ? 'D-DAY' : 'D-' + diff;
+  }
+
+  function fillDates() {
+    $('dOpen').textContent = dateText(CONFIG.openAt);
+    $('dClose').textContent = dateText(CONFIG.closeAt);
+    $('dClose2').textContent = dateText(CONFIG.closeAt);
+    $('dLaunch').textContent = dateText(CONFIG.launchAt);
+    $('slSched').textContent = '마감 ' + dateText(CONFIG.closeAt) + ' · 출시 ' + dateText(CONFIG.launchAt);
+  }
+
+  function renderChips() {
+    var box = $('platforms'); box.textContent = '';
+    PLATFORMS.forEach(function (p) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.textContent = p.label;
+      b.className = selectedPlat === p.id ? 'chip on' : 'chip';
+      b.setAttribute('aria-pressed', selectedPlat === p.id ? 'true' : 'false');
+      b.addEventListener('click', function () { selectedPlat = p.id; setErr('platform', ''); renderChips(); });
+      box.appendChild(b);
+    });
+  }
+
+  function clearErrs() { ['name', 'phone', 'email', 'platform', 'agree'].forEach(function (f) { setErr(f, ''); }); $('formAlert').hidden = true; }
+  function fail(reason, level, focusId, summary) {
+    (level === 'warn' ? console.warn : console.error)('[신청 저장 실패] 이유: ' + reason);
+    if (summary) { $('formAlert').textContent = summary; $('formAlert').hidden = false; }
+    if (focusId) $(focusId).focus();
+  }
+
+  function submit(e) {
+    e.preventDefault();
+    clearErrs();
+    if (closed()) { renderPublic(); fail('마감 지남', 'error', null, null); return; }
+
+    var name = $('f-name').value.trim();
+    var phone = digits($('f-phone').value);
+    var email = $('f-email').value.trim().toLowerCase();
+    var agree = $('f-agree').checked;
+    var bad = [];
+    if (name.length < 2) { setErr('name', '이름을 2자 이상 입력해 주세요.'); bad.push('f-name'); }
+    if (!isPhone(phone)) { setErr('phone', '휴대폰 번호 형식을 확인해 주세요.'); bad.push('f-phone'); }
+    if (!isEmail(email)) { setErr('email', '이메일 형식을 확인해 주세요. 예: name@example.com'); bad.push('f-email'); }
+    if (!selectedPlat) { setErr('platform', '플랫폼을 하나 선택해 주세요.'); bad.push('platforms'); }
+    if (!agree) { setErr('agree', '사전예약을 위해 동의가 필요해요.'); bad.push('f-agree'); }
+    if (bad.length) {
+      fail(!agree && bad.length === 1 ? '동의 안 함' : '빈칸 또는 형식 오류', 'error', bad[0] === 'platforms' ? null : bad[0], '입력 내용을 확인해 주세요. 표시된 항목을 고치면 신청할 수 있어요.');
+      return;
+    }
+
+    var list = read(KEY);
+    var dupPhone = list.some(function (r) { return r.phone === phone; });
+    var dupEmail = list.some(function (r) { return r.email && r.email === email; });
+    if (dupPhone || dupEmail) {
+      if (dupPhone) setErr('phone', '이미 사전예약된 연락처예요.');
+      if (dupEmail) setErr('email', '이미 사전예약된 이메일이에요.');
+      fail('중복 신청(' + (dupPhone && dupEmail ? '연락처·이메일 모두' : dupPhone ? '연락처' : '이메일') + ' 중복)', 'warn', dupPhone ? 'f-phone' : 'f-email', '이미 신청이 접수된 정보예요. 연락처와 이메일은 각각 한 번만 쓸 수 있어요.');
+      return;
+    }
+
+    var btn = $('submitBtn');
+    btn.disabled = true;
+    $('submitLabel').textContent = '신청 중';
+    var bar = document.createElement('span'); bar.className = 'loadbar'; bar.id = 'bar'; bar.setAttribute('aria-hidden', 'true');
+    btn.appendChild(bar);
+
+    setTimeout(function () {
+      var latest = read(KEY);
+      latest.push({ id: newId(), name: name, phone: phone, email: email, platform: selectedPlat, createdAt: new Date().toISOString(), updatedAt: null });
+      write(KEY, latest);
+      console.log('[신청 저장 성공] 저장된 신청 ' + latest.length + '건');
+      var b = $('bar'); if (b) b.remove();
+      renderPublic();
+      $('doneText').textContent = name + '님, 신청해 주셔서 감사합니다. 출시 일정과 혜택 지급 방법은 입력하신 연락처로 안내드릴게요.';
+      $('donePlat').textContent = '주 이용 플랫폼: ' + platLabel(selectedPlat);
+      $('form').hidden = true; $('done').hidden = false;
+      $('done').scrollIntoView({ block: 'center' });
+    }, 700);
+  }
+
+  function resetForm() {
+    $('form').reset(); selectedPlat = ''; renderChips(); clearErrs();
+    $('done').hidden = true; $('form').hidden = false; renderPublic();
+  }
+
+  function saveMemo() {
+    var t = $('memo').value.trim();
+    if (!t) { $('memo').focus(); return; }
+    var m = read(MKEY); m.push({ id: newId(), text: t, at: new Date().toISOString() }); write(MKEY, m);
+    $('memo').value = ''; $('memoMsg').textContent = '메모를 남겼어요. 고맙습니다.';
+    console.log('[피드백 저장] 메모 ' + m.length + '건');
+  }
+
+  /* ---------- 관리자 ---------- */
+  var editingId = null, query = '', platFilter = '';
+
+  function filtered() {
+    var q = query.trim().toLowerCase(), qd = digits(query);
+    return read(KEY).filter(function (r) {
+      if (platFilter && r.platform !== platFilter) return false;
+      if (!q) return true;
+      return r.name.toLowerCase().indexOf(q) > -1 || (r.email || '').indexOf(q) > -1 || (qd && r.phone.indexOf(qd) > -1);
+    });
+  }
+
+  function td(text, cls) { var c = document.createElement('td'); c.textContent = text; if (cls) c.className = cls; return c; }
+
+  function renderAdmin() {
+    var all = read(KEY), rows = filtered().slice().reverse(), order = {};
+    all.forEach(function (r, i) { order[r.id] = i + 1; });
+    $('countAdm').textContent = '총 ' + all.length + '건' + (rows.length !== all.length ? ' · 검색 ' + rows.length + '건' : '');
+    $('forceClosed').checked = read(CKEY)[0] === 1;
+    $('csvBtn').disabled = all.length === 0;
+    var body = $('tbody'); body.textContent = '';
+    if (!rows.length) {
+      var tr0 = document.createElement('tr'), c = td(all.length ? '조건에 맞는 신청이 없어요.' : '아직 신청이 없어요. 사전예약 화면에서 신청하거나 "+ 신청 추가"를 눌러 보세요.', 'empty');
+      c.colSpan = 9; tr0.appendChild(c); body.appendChild(tr0);
+    }
+    rows.forEach(function (r) {
+      var no = order[r.id];
+      var tr = document.createElement('tr');
+      var cb = document.createElement('td'), chk = document.createElement('input');
+      chk.type = 'checkbox'; chk.className = 'rowchk'; chk.value = r.id; chk.setAttribute('aria-label', maskName(r.name) + ' 선택');
+      chk.addEventListener('change', syncSel); cb.appendChild(chk); tr.appendChild(cb);
+      tr.appendChild(td(no)); tr.appendChild(td(maskName(r.name))); tr.appendChild(td(maskPhone(r.phone))); tr.appendChild(td(maskEmail(r.email)));
+      tr.appendChild(td(platLabel(r.platform))); tr.appendChild(td(stamp(r.createdAt))); tr.appendChild(td(stamp(r.updatedAt)));
+      var ac = document.createElement('td'), acw = document.createElement('div'); acw.style.display = 'flex'; acw.style.gap = '8px'; ac.appendChild(acw);
+      var be = document.createElement('button'); be.type = 'button'; be.className = 'btn small paper'; be.textContent = '수정'; be.setAttribute('aria-label', maskName(r.name) + ' 수정');
+      be.addEventListener('click', function () { openDlg(r.id); });
+      var bd = document.createElement('button'); bd.type = 'button'; bd.className = 'btn small danger'; bd.textContent = '삭제'; bd.setAttribute('aria-label', maskName(r.name) + ' 삭제');
+      bd.addEventListener('click', function () { removeIds([r.id]); });
+      acw.appendChild(be); acw.appendChild(bd); tr.appendChild(ac); body.appendChild(tr);
+    });
+    $('selAll').checked = false; syncSel();
+
+    var ml = $('memoList'); ml.textContent = '';
+    var memos = read(MKEY).slice().reverse();
+    if (!memos.length) { var li0 = document.createElement('li'); li0.className = 'empty'; li0.textContent = '아직 남겨진 메모가 없어요.'; ml.appendChild(li0); }
+    memos.forEach(function (m) {
+      var li = document.createElement('li');
+      var t = document.createElement('span'); t.className = 't'; t.textContent = stamp(m.at);
+      var x = document.createElement('span'); x.className = 'x'; x.textContent = m.text;
+      var d = document.createElement('button'); d.type = 'button'; d.className = 'btn small danger'; d.textContent = '삭제'; d.setAttribute('aria-label', '메모 삭제');
+      d.addEventListener('click', function () { write(MKEY, read(MKEY).filter(function (z) { return z.id !== m.id; })); renderAdmin(); });
+      li.appendChild(t); li.appendChild(x); li.appendChild(d); ml.appendChild(li);
+    });
+  }
+
+  function syncSel() {
+    var n = document.querySelectorAll('.rowchk:checked').length;
+    $('delSel').disabled = n === 0; $('delSel').textContent = n ? '선택 삭제 (' + n + ')' : '선택 삭제';
+  }
+
+  function removeIds(ids) {
+    if (!ids.length) return;
+    ask(ids.length + '건을 삭제할까요? 되돌릴 수 없어요.', function () {
+      write(KEY, read(KEY).filter(function (r) { return ids.indexOf(r.id) === -1; }));
+      console.log('[신청 삭제] ' + ids.length + '건 삭제, 남은 신청 ' + read(KEY).length + '건');
+      renderAdmin();
+    });
+  }
+
+  /* ---------- CSV 내보내기 ---------- */
+  function fullStamp(iso) {
+    if (!iso) return '';
+    var d = new Date(iso);
+    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+  }
+  function csvCell(v) {
+    v = String(v == null ? '' : v);
+    if (/^[=+\-@\t\r]/.test(v)) v = "'" + v;            // 엑셀 수식으로 실행되는 것 방지
+    if (/[",\r\n]/.test(v)) v = '"' + v.replace(/"/g, '""') + '"';
+    return v;
+  }
+  function buildCsv() {
+    var head = ['번호', '이름', '연락처', '이메일', '주 이용 플랫폼', '개인정보 동의', '신청 일시', '최종 수정 일시'];
+    var lines = [head.map(csvCell).join(',')];
+    read(KEY).forEach(function (r, i) {                        // 저장된 순서 = 신청 순서(오래된 것이 1번)
+      lines.push([i + 1, r.name, fmtPhone(r.phone), r.email || '', platLabel(r.platform), '동의', fullStamp(r.createdAt), fullStamp(r.updatedAt)].map(csvCell).join(','));
+    });
+    return lines.join('\r\n');
+  }
+  function openExport() {
+    var n = read(KEY).length; if (!n) return;
+    $('expInfo').textContent = '신청 ' + n + '건 전체를 내려받아요. (검색·필터와 상관없이 전부)';
+    $('expDone').hidden = true; $('expFallback').hidden = true; $('expFallback').open = false;
+    var d = $('expDlg'); if (typeof d.showModal === 'function') d.showModal(); else d.setAttribute('open', '');
+  }
+  function doExport() {
+    var csv = buildCsv(), n = read(KEY).length, t = new Date();
+    var name = 'lumina-reservations_' + t.getFullYear() + pad(t.getMonth() + 1) + pad(t.getDate()) + '-' + pad(t.getHours()) + pad(t.getMinutes()) + '.csv';
+    try {
+      var url = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8' }));  // BOM: 엑셀에서 한글 깨짐 방지
+      var a = document.createElement('a'); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1500);
+    } catch (e) {}
+    $('expText').value = csv;
+    $('expDone').textContent = name + ' (' + n + '건)을 내려받았어요. 파일이 보이지 않으면 아래 "다운로드가 안 될 때"를 열어 주세요.';
+    $('expDone').hidden = false; $('expFallback').hidden = false;
+    console.log('[CSV 다운로드] ' + n + '건');
+  }
+  function closeExport() { var d = $('expDlg'); if (typeof d.close === 'function') d.close(); else d.removeAttribute('open'); }
+
+  /* confirm()이 막힌 환경에서도 되는 확인창 */
+  var onYes = null;
+  function ask(msg, yes) {
+    onYes = yes; $('cfmMsg').textContent = msg;
+    var d = $('cfm'); if (typeof d.showModal === 'function') d.showModal(); else d.setAttribute('open', '');
+  }
+  function closeAsk() { var d = $('cfm'); if (typeof d.close === 'function') d.close(); else d.removeAttribute('open'); }
+
+  function openDlg(id) {
+    editingId = id || null;
+    var rec = id ? read(KEY).filter(function (r) { return r.id === id; })[0] : null;
+    $('dlgTitle').textContent = rec ? '신청 수정' : '신청 추가';
+    $('dlgHelp').textContent = rec ? '개인정보 보호를 위해 기존 값은 가려져 있어요. 바꿀 항목만 입력하고, 비워 두면 그대로 유지돼요.' : '';
+    $('d-name').value = ''; $('d-phone').value = ''; $('d-email').value = '';
+    $('d-name').placeholder = rec ? maskName(rec.name) : '이름';
+    $('d-phone').placeholder = rec ? maskPhone(rec.phone) : '010-0000-0000';
+    $('d-email').placeholder = rec ? maskEmail(rec.email) : 'name@example.com';
+    $('d-plat').value = rec ? rec.platform : PLATFORMS[0].id;
+    ['name', 'phone', 'email', 'plat'].forEach(function (f) { $('de-' + f).textContent = ''; });
+    var d = $('dlg'); if (typeof d.showModal === 'function') d.showModal(); else d.setAttribute('open', '');
+    $('d-name').focus();
+  }
+  function closeDlg() { var d = $('dlg'); if (typeof d.close === 'function') d.close(); else d.removeAttribute('open'); }
+
+  function saveDlg(e) {
+    e.preventDefault();
+    var list = read(KEY), rec = editingId ? list.filter(function (r) { return r.id === editingId; })[0] : null;
+    var name = $('d-name').value.trim(), phone = digits($('d-phone').value), email = $('d-email').value.trim().toLowerCase(), plat = $('d-plat').value, ok = true;
+    if (rec) { if (!name) name = rec.name; if (!phone) phone = rec.phone; if (!email) email = rec.email || ''; }
+    ['name', 'phone', 'email', 'plat'].forEach(function (f) { $('de-' + f).textContent = ''; });
+    if (name.length < 2) { $('de-name').textContent = '이름을 2자 이상 입력해 주세요.'; ok = false; }
+    if (!isPhone(phone)) { $('de-phone').textContent = '휴대폰 번호 형식을 확인해 주세요.'; ok = false; }
+    if (!isEmail(email)) { $('de-email').textContent = '이메일 형식을 확인해 주세요.'; ok = false; }
+    if (ok && list.some(function (r) { return r.phone === phone && r.id !== editingId; })) { $('de-phone').textContent = '이미 사전예약된 연락처예요.'; ok = false; }
+    if (ok && list.some(function (r) { return r.email && r.email === email && r.id !== editingId; })) { $('de-email').textContent = '이미 사전예약된 이메일이에요.'; ok = false; }
+    if (!ok) return;
+    if (rec) {
+      rec.name = name; rec.phone = phone; rec.email = email; rec.platform = plat; rec.updatedAt = new Date().toISOString();
+      console.log('[신청 수정] 1건 수정');
+    } else {
+      list.push({ id: newId(), name: name, phone: phone, email: email, platform: plat, createdAt: new Date().toISOString(), updatedAt: null });
+      console.log('[신청 추가] 저장된 신청 ' + list.length + '건');
+    }
+    write(KEY, list); closeDlg(); renderAdmin();
+  }
+
+  /* ---------- 화면 전환 (#admin 이면 관리자, 나머지는 사전예약) ---------- */
+  function route(hh) {
+    var h = typeof hh === 'string' ? hh : window.location.hash, admin = h === '#admin', authed = isAuthed();
+    $('viewPublic').hidden = admin;
+    $('viewGate').hidden = !(admin && !authed);
+    $('viewAdmin').hidden = !(admin && authed);
+    $('logoutBtn').hidden = !CONFIG.requirePassword;
+    document.title = admin ? '관리자 · 루미나 아카디아' : '루미나 아카디아 사전예약';
+    if (admin && !authed) { $('g-pw').value = ''; $('e-pw').textContent = ''; $('g-pw').focus(); }
+    else if (admin) renderAdmin();
+    else {
+      renderPublic();
+      if (h) { var t = document.getElementById(h.slice(1)); if (t) t.scrollIntoView(); } else window.scrollTo(0, 0);
+    }
+  }
+
+  /* ---------- 캐러셀 ---------- */
+  var slides = [].slice.call(document.querySelectorAll('.slide')), idx = 0, prev = 0, playing = true, timer = null;
+  function off(i, base) { var n = slides.length; return ((((i - base + 2) % n) + n) % n) - 2; }
+  function paint() {
+    slides.forEach(function (el, i) {
+      var o = off(i, idx), jump = Math.abs(o - off(i, prev)) > 2, pos = o === 0 ? 'cur' : Math.abs(o) === 1 ? 'near' : 'far';
+      el.className = 'slide b' + i + ' ' + pos + (jump ? ' jump' : '');
+      el.style.transform = 'translateX(' + (o * 100) + '%)';
+      el.setAttribute('aria-hidden', o !== 0 ? 'true' : 'false');
+    });
+    $('curNo').textContent = pad(idx + 1);
+  }
+  function go(n) { var t = slides.length; prev = idx; idx = ((n % t) + t) % t; paint(); }
+  function setPlay(v) {
+    playing = v; $('icoPause').hidden = !v; $('icoPlay').hidden = v;
+    $('carPlay').setAttribute('aria-label', v ? '자동 재생 일시정지' : '자동 재생 시작');
+  }
+
+  /* 미리보기처럼 form 제출이 막힌 환경에서도 Enter로 제출되게 처리 */
+  function enterKey(id, fn) {
+    $(id).addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && e.target.tagName === 'INPUT' && e.target.type !== 'checkbox') { e.preventDefault(); fn(e); }
+    });
+  }
+
+  /* ---------- 연결 ---------- */
+  fillDates(); renderChips(); paint(); renderPublic();
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) setPlay(false); else timer = setInterval(function () { if (playing) go(idx + 1); }, 4500);
+  $('carPrev').addEventListener('click', function () { go(idx - 1); });
+  $('carNext').addEventListener('click', function () { go(idx + 1); });
+  $('carPlay').addEventListener('click', function () { setPlay(!playing); });
+
+  $('submitBtn').addEventListener('click', submit); enterKey('form', submit);
+  $('againBtn').addEventListener('click', function () { resetForm(); $('f-name').focus(); });
+  $('f-name').addEventListener('input', function () { setErr('name', ''); });
+  $('f-phone').addEventListener('input', function (e) { e.target.value = fmtPhone(digits(e.target.value)); setErr('phone', ''); });
+  $('f-email').addEventListener('input', function () { setErr('email', ''); });
+  $('f-agree').addEventListener('change', function () { setErr('agree', ''); });
+  $('memoBtn').addEventListener('click', saveMemo);
+
+  if (CONFIG.showHint) { $('gateHint').textContent = '수업 실습용이라 비밀번호를 알려 드려요: ' + CONFIG.password; $('gateHint').hidden = false; }
+  function gateSubmit(e) {
+    e.preventDefault();
+    if ($('g-pw').value === CONFIG.password) { setAuthed(true); console.log('[관리자] 입장'); route(); }
+    else { $('e-pw').textContent = '비밀번호가 맞지 않아요. 다시 입력해 주세요.'; $('g-pw').value = ''; $('g-pw').focus(); console.warn('[관리자] 입장 실패'); }
+  }
+  $('gateBtn').addEventListener('click', gateSubmit); enterKey('gateForm', gateSubmit);
+  $('logoutBtn').addEventListener('click', function () { setAuthed(false); goto('#reserve'); });
+  /* 주소 해시 이동이 막힌 환경(미리보기 등)에서도 화면이 바뀌도록 링크를 직접 처리 */
+  function goto(h) { try { if (window.location.hash !== h) window.location.hash = h; } catch (x) {} route(h); }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    if (!a) return;
+    e.preventDefault();
+    goto(a.getAttribute('href'));
+  });
+
+  PLATFORMS.forEach(function (p) {
+    [$('d-plat'), $('pf')].forEach(function (sel) { var o = document.createElement('option'); o.value = p.id; o.textContent = p.label; sel.appendChild(o); });
+  });
+  var all = document.createElement('option'); all.value = ''; all.textContent = '전체 플랫폼'; $('pf').insertBefore(all, $('pf').firstChild); $('pf').value = '';
+  $('q').addEventListener('input', function (e) { query = e.target.value; renderAdmin(); });
+  $('pf').addEventListener('change', function (e) { platFilter = e.target.value; renderAdmin(); });
+  $('addBtn').addEventListener('click', function () { openDlg(null); });
+  $('delSel').addEventListener('click', function () { removeIds([].map.call(document.querySelectorAll('.rowchk:checked'), function (c) { return c.value; })); });
+  $('delAll').addEventListener('click', function () { var ids = read(KEY).map(function (r) { return r.id; }); if (ids.length) removeIds(ids); });
+  $('selAll').addEventListener('change', function (e) { [].forEach.call(document.querySelectorAll('.rowchk'), function (c) { c.checked = e.target.checked; }); syncSel(); });
+  $('forceClosed').addEventListener('change', function (e) { write(CKEY, e.target.checked ? [1] : [0]); console.log('[설정] 마감 상태 ' + (e.target.checked ? '켬' : '끔')); });
+  $('dlgSave').addEventListener('click', saveDlg); enterKey('dlgForm', saveDlg);
+  $('dlgCancel').addEventListener('click', closeDlg);
+  $('csvBtn').addEventListener('click', openExport);
+  $('expGo').addEventListener('click', doExport);
+  $('expClose').addEventListener('click', closeExport);
+  $('cfmNo').addEventListener('click', function () { onYes = null; closeAsk(); });
+  $('cfmYes').addEventListener('click', function () { var f = onYes; onYes = null; closeAsk(); if (f) f(); });
+  $('d-phone').addEventListener('input', function (e) { e.target.value = fmtPhone(digits(e.target.value)); });
+
+  window.addEventListener('hashchange', route);
+  /* 다른 탭에서 신청이 들어오면 관리자 목록·신청 수도 바로 갱신 */
+  window.addEventListener('storage', function (e) { if (e.key === KEY || e.key === MKEY || e.key === CKEY) { if (isAuthed() && window.location.hash === '#admin') renderAdmin(); else renderPublic(); } });
+  route();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+        (request.auth.token.email == 'gladay014@gmail.com' && request.auth.token.email_verified == true);
+    }
+
+    // Reservation validation
+    function isValidReservation(data) {
+      return data.keys().hasAll(['name', 'phone', 'email', 'platform', 'createdAt']) &&
+        data.keys().hasOnly(['id', 'name', 'phone', 'email', 'platform', 'createdAt', 'updatedAt']) &&
+        data.name is string && data.name.size() >= 2 && data.name.size() <= 50 &&
+        data.phone is string && data.phone.size() >= 9 && data.phone.size() <= 15 &&
+        data.email is string && data.email.size() >= 5 && data.email.size() <= 100 &&
+        data.platform in ['ios', 'android', 'pc', 'console'] &&
+        data.createdAt is string && data.createdAt.size() <= 50;
+    }
+
+    // Feedback validation
+    function isValidFeedback(data) {
+      return data.keys().hasAll(['text', 'createdAt']) &&
+        data.keys().hasOnly(['id', 'text', 'createdAt']) &&
+        data.text is string && data.text.size() >= 1 && data.text.size() <= 500 &&
+        data.createdAt is string && data.createdAt.size() <= 50;
+    }
+
+    // Stats validation
+    function isValidStats(data) {
+      return data.keys().hasAll(['count', 'forceClosed']) &&
+        data.keys().hasOnly(['count', 'forceClosed', 'updatedAt']) &&
+        data.count is number && data.count >= 0 &&
+        data.forceClosed is bool;
+    }
+
+    // 1. Reservations Collection
+    match /reservations/{reservationId} {
+      allow get, list: if isAdmin();
+      allow create: if isValidId(reservationId) && isValidReservation(incoming());
+      allow update: if isAdmin() && isValidReservation(incoming());
+      allow delete: if isAdmin();
+    }
+
+    // 2. Feedback Collection
+    match /feedback/{feedbackId} {
+      allow get, list: if isAdmin();
+      allow create: if isValidId(feedbackId) && isValidFeedback(incoming());
+      allow delete: if isAdmin();
+    }
+
+    // 3. Public Stats & Settings Document
+    match /stats/public {
+      allow get, list: if true;
+      allow create, update: if isValidStats(incoming());
+    }
+
+    // 4. Test connection doc (for boot validation)
+    match /test/connection {
+      allow read: if true;
+    }
+  }
+}

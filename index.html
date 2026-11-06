@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>루미나 아카디아 사전예약</title>
+<meta name="description" content="꺼져 가는 빛의 도시를 다시 밝히는 판타지 모험, 루미나 아카디아 사전예약 이벤트 페이지" />
+<meta property="og:title" content="루미나 아카디아 사전예약" />
+<meta property="og:description" content="꺼져 가는 빛의 도시를 다시 밝히는 판타지 모험, 루미나 아카디아 사전예약 이벤트 페이지" />
+<meta property="og:type" content="website" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gugi&family=Press+Start+2P&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+  :root { --accent: #F7C948; --bg: #FFF1C2; --ink: #1B1A2E; --muted: #4A4868; --err: #B3261E; color-scheme: light; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Noto Sans KR', system-ui, sans-serif; line-height: 1.6; }
+  a { color: var(--ink); }
+  button { font: inherit; }
+  .px { font-family: 'Press Start 2P', 'Noto Sans KR', monospace; }
+  .gg { font-family: 'Gugi', 'Noto Sans KR', sans-serif; }
+  .muted { color: var(--muted); }
+  .wrap { max-width: 1120px; margin: 0 auto; padding-left: clamp(20px, 5vw, 48px); padding-right: clamp(20px, 5vw, 48px); }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 26px; border: 4px solid var(--ink); border-radius: 0; background: var(--accent); color: var(--ink); font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-size: 18px; text-decoration: none; cursor: pointer; box-shadow: 4px 4px 0 var(--ink); gap: 10px; }
+  .btn.paper { background: #fff; }
+  .btn.small { min-height: 40px; padding: 0 14px; font-size: 15px; border-width: 3px; box-shadow: 3px 3px 0 var(--ink); }
+  .btn.danger { background: #fff; color: var(--err); border-color: var(--err); box-shadow: 3px 3px 0 var(--err); }
+  .btn:hover:not([disabled]) { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+  .btn.small:hover:not([disabled]) { box-shadow: 5px 5px 0 var(--ink); }
+  .btn:active:not([disabled]) { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--ink); }
+  .btn[disabled] { background: #d8d4e6; color: #6b6985; cursor: not-allowed; box-shadow: none; }
+  .btn:focus-visible, .nv:focus-visible, .chip:focus-visible, .car-btn:focus-visible, .pbtn:focus-visible, .inp:focus-visible, input[type=checkbox]:focus-visible, textarea:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+  .nv { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 3px solid var(--ink); background: #fff; color: var(--ink); font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-size: 15px; text-decoration: none; box-shadow: 3px 3px 0 var(--ink); }
+  .nv:hover { background: var(--accent); }
+  .card { background: #fff; border: 4px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); }
+  .no { display: inline-block; background: var(--ink); color: var(--accent); padding: 9px 10px 7px; font-family: 'Press Start 2P', monospace; font-size: 13px; }
+  .sec-t { margin: 0; font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-size: clamp(28px, 4.5vw, 44px); font-weight: 400; line-height: 1.2; }
+  .dots { height: 8px; background: repeating-linear-gradient(90deg, var(--ink) 0 8px, transparent 8px 16px); }
+  .sec { padding-top: clamp(56px, 8vw, 96px); display: flex; flex-direction: column; gap: 28px; }
+  .sec-head { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .slot { width: 96px; height: 96px; flex: none; border: 4px solid var(--ink); display: flex; align-items: center; justify-content: center; box-shadow: inset -6px -6px 0 rgba(27,26,46,.25); position: relative; overflow: hidden; background: var(--c); }
+  .slot::after { content: ""; position: absolute; top: 0; left: -30%; width: 14px; height: 100%; background: rgba(255,255,255,.6); transform: skewX(-20deg); animation: shine 2.8s steps(10) infinite; }
+  .slot svg { animation: bob 1.6s steps(4) infinite; }
+
+  .inp { min-height: 48px; padding: 0 14px; border: 4px solid var(--ink); border-radius: 0; background: #fff; color: var(--ink); font-family: inherit; font-size: 16px; width: 100%; }
+  textarea.inp { padding: 10px 14px; min-height: 96px; resize: vertical; }
+  .inp.bad { border-color: var(--err); }
+  .chip { min-height: 48px; padding: 0 18px; border: 4px solid var(--ink); border-radius: 0; background: #fff; color: var(--ink); font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-size: 15px; cursor: pointer; box-shadow: 3px 3px 0 var(--ink); }
+  .chip:hover { background: var(--bg); }
+  .chip.on { background: var(--accent); transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
+  .err { font-size: 14px; color: var(--err); font-weight: 700; }
+  .alert { padding: 12px 14px; border: 3px solid var(--err); background: #fff; color: var(--err); font-weight: 700; font-size: 15px; }
+  .alert.info { border-color: var(--ink); color: var(--ink); background: var(--accent); }
+  .field { display: flex; flex-direction: column; gap: 8px; }
+  .lbl { font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-size: 16px; }
+
+  /* 상단 */
+  .topbar { padding-top: 20px; padding-bottom: 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .logo { display: flex; align-items: center; gap: 12px; }
+  .logo span { font-size: 22px; }
+  nav { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  /* 캐러셀 */
+  .car { --sw: clamp(300px, 31vw, 600px); --sh: calc(var(--sw) * .85); position: relative; width: 100%; height: var(--sh); overflow: hidden; }
+  .slide { position: absolute; top: 0; left: 50%; width: var(--sw); height: 100%; margin-left: calc(var(--sw) / -2); transition: transform .6s cubic-bezier(.22,.61,.36,1); }
+  .slide.jump { transition: none; }
+  .slide-in { position: absolute; top: 0; bottom: 0; left: 6px; right: 6px; overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; text-align: center; padding: 0 20px 28px; border: 4px solid var(--ink); }
+  .slide-in::before { content: ""; position: absolute; top: 14px; left: 16px; width: 4px; height: 4px; background: #fff; box-shadow: 46px 26px 0 #fff, 92px 8px 0 #F7C948, 148px 34px 0 #fff, 210px 14px 0 #fff, 260px 40px 0 #F7C948, 18px 64px 0 #fff, 300px 10px 0 #fff, 340px 52px 0 #fff, 400px 18px 0 #F7C948; }
+  .b0 .slide-in { background: #2B2D5B; } .b1 .slide-in { background: #3B2A58; } .b2 .slide-in { background: #1F4D5C; } .b3 .slide-in { background: #5B2A3A; } .b4 .slide-in { background: #4A3B1F; }
+  .dim { position: absolute; inset: 0; background: var(--ink); opacity: .55; transition: opacity .6s; }
+  .slide.cur .dim { opacity: 0; } .slide.far .dim { opacity: .78; }
+  .art { position: absolute; top: 9%; left: 50%; width: calc(var(--sw) * .3); height: auto; transform: translateX(-50%); }
+  .sl-eyebrow { font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-size: 14px; color: #F7C948; margin-bottom: 6px; }
+  .sl-title { margin: 0; font-family: 'Gugi', 'Noto Sans KR', sans-serif; font-weight: 400; font-size: clamp(22px, calc(var(--sw) * .075), 34px); line-height: 1.25; color: #fff; }
+  .sl-sub { margin: 8px 0 0; font-size: clamp(14px, calc(var(--sw) * .04), 17px); color: #E9E6FF; }
+  .car-btn { position: absolute; top: 50%; margin-top: -24px; width: 48px; height: 48px; border: 3px solid var(--ink); border-radius: 0; background: #fff; color: var(--ink); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 3; box-shadow: 3px 3px 0 var(--ink); }
+  .car-btn.prev { left: calc(50% - var(--sw) / 2 + 18px); } .car-btn.next { left: calc(50% + var(--sw) / 2 - 66px); }
+  .car-btn:hover, .pbtn:hover { background: var(--accent); }
+  .pbtn { display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border: 3px solid var(--ink); border-radius: 0; background: #fff; color: var(--ink); cursor: pointer; box-shadow: 3px 3px 0 var(--ink); }
+
+  /* 혜택 카드 */
+  #rewards .card { position: relative; padding: 36px 24px 24px; box-shadow: 8px 8px 0 var(--ink), inset 0 12px 0 var(--c); transition: transform .15s steps(3), box-shadow .15s steps(3); display: flex; flex-direction: column; gap: 16px; flex: 1 1 280px; min-width: 0; }
+  #rewards .card:nth-child(1) { --c: #9B7BFF; background: #EDE6FF; }
+  #rewards .card:nth-child(2) { --c: #3CCFB4; background: #D9F7EE; }
+  #rewards .card:nth-child(3) { --c: #FF7A59; background: #FFE3D8; }
+  #rewards .card:hover { transform: translate(-4px, -4px); box-shadow: 12px 12px 0 var(--ink), inset 0 12px 0 var(--c); }
+  #rewards .card .px { align-self: flex-start; background: var(--c); border: 3px solid var(--ink); padding: 4px 8px 2px; font-size: 11px; }
+  #rewards .card:nth-child(2) .slot svg { animation-delay: .4s; } #rewards .card:nth-child(3) .slot svg { animation-delay: .8s; }
+  #rewards .card:nth-child(2) .slot::after { animation-delay: .9s; } #rewards .card:nth-child(3) .slot::after { animation-delay: 1.8s; }
+
+  /* 폼 */
+  .formbar { background: var(--ink); padding: 10px 14px; display: flex; align-items: center; gap: 8px; }
+  .formbar i { width: 10px; height: 10px; background: #fff; display: block; }
+  .formbar i:first-child { background: var(--accent); }
+  .terms { padding: 14px 16px; border: 3px solid var(--ink); background: var(--bg); font-size: 14px; line-height: 1.7; }
+  .agree { display: flex; align-items: center; gap: 12px; min-height: 44px; font-size: 15px; cursor: pointer; }
+  .agree input { width: 24px; height: 24px; accent-color: var(--ink); flex: none; }
+  .loadbar { display: inline-block; width: 64px; height: 12px; border: 3px solid var(--ink); background: #fff; position: relative; overflow: hidden; }
+  .loadbar::after { content: ""; position: absolute; top: 0; bottom: 0; width: 18px; background: var(--ink); animation: load .7s steps(4) infinite; }
+  @keyframes load { from { left: -18px; } to { left: 64px; } }
+  @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+  @keyframes shine { 0% { left: -30%; } 60%, 100% { left: 130%; } }
+
+  footer.site { background: var(--ink); color: #E9E6FF; margin-top: 0; }
+  footer.site .wrap { padding-top: 28px; padding-bottom: 28px; font-size: 14px; display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+  footer.site a { color: #E9E6FF; }
+
+  .sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; padding: 0; }
+
+  @media (max-width: 1000px) { .car { --sw: 60vw; } }
+  @media (max-width: 700px) { .car { --sw: 78vw; --sh: calc(var(--sw) * 1.05); } }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .slide, .dim, #rewards .card { transition: none; }
+    .slot::after, .slot svg, .loadbar::after { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 픽셀 아트 정의 -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <g id="i-intro"><path fill="#0E0D1C" d="M3 0h6v1H3z M2 1h1v1H2z M9 1h1v1H9z M1 2h1v1H1z M10 2h1v1h-1z M0 3h1v2H0z M11 3h1v2h-1z M1 5h1v1H1z M10 5h1v1h-1z M2 6h1v1H2z M9 6h1v1H9z M3 7h1v1H3z M8 7h1v1H8z M4 8h1v1H4z M7 8h1v1H7z M5 9h2v1H5z"/><path fill="#5BE0D0" d="M3 1h6v1H3z M2 2h8v1H2z M1 3h10v2H1z M2 5h8v1H2z M3 6h6v1H3z M4 7h4v1H4z M5 8h2v1H5z"/><path fill="#D9FFF8" d="M3 1h2v1H3z M6 1h1v1H6z M2 2h1v1H2z M2 3h1v1H2z"/><path fill="#2A9D8F" d="M7 3h4v2H7z M6 5h4v1H6z M6 6h3v1H6z M6 7h2v1H6z M6 8h1v1H6z"/></g>
+    <g id="i-schedule"><path fill="#0E0D1C" d="M0 1h12v1H0z M0 2h1v9H0z M11 2h1v9h-1z M0 11h12v1H0z"/><path fill="#E8553D" d="M1 2h10v2H1z"/><path fill="#FFFFFF" d="M1 4h10v7H1z"/><path fill="#0E0D1C" d="M3 0h1v3H3z M8 0h1v3H8z M2 5h2v1H2z M5 5h2v1H5z M8 5h2v1H8z M2 7h2v1H2z M5 7h2v1H5z M2 9h2v1H2z M8 9h2v1H8z"/><path fill="#F7C948" d="M8 7h2v1H8z M5 9h2v1H5z"/></g>
+    <g id="i-skin"><path fill="#0E0D1C" d="M5 0h4v3H5z M5 1h4v3H5z M4 2h6v3H4z M0 3h14v3H0z M1 4h12v3H1z M2 5h10v3H2z M3 6h8v3H3z M2 7h5v3H2z M7 7h5v3H7z M1 8h5v3H1z M8 8h5v3H8z"/><path fill="#F7C948" d="M6 1h2v1H6z M6 2h2v1H6z M5 3h4v1H5z M1 4h12v1H1z M2 5h10v1H2z M3 6h8v1H3z M4 7h6v1H4z M3 8h3v1H3z M8 8h3v1H8z M2 9h3v1H2z M9 9h3v1H9z"/><path fill="#FFE48A" d="M6 2h1v1H6z M2 4h3v1H2z M3 5h1v1H3z"/></g>
+    <g id="i-coupon"><path fill="#0E0D1C" d="M3 0h6v3H3z M2 1h8v3H2z M1 2h10v3H1z M0 3h12v3H0z M0 4h12v3H0z M0 5h12v3H0z M0 6h12v3H0z M1 7h10v3H1z M2 8h8v3H2z M3 9h6v3H3z"/><path fill="#F7C948" d="M4 1h4v1H4z M3 2h6v1H3z M2 3h8v1H2z M1 4h10v1H1z M1 5h10v1H1z M1 6h10v1H1z M1 7h10v1H1z M2 8h8v1H2z M3 9h6v1H3z M4 10h4v1H4z"/><path fill="#C98F1B" d="M5 4h2v5H5z"/><path fill="#FFE48A" d="M3 3h1v2H3z"/></g>
+    <g id="i-goods"><path fill="#0E0D1C" d="M2 0h4v3H2z M6 0h4v3H6z M1 1h6v3H1z M5 1h6v3H5z M3 2h6v3H3z M0 3h12v3H0z M0 4h12v3H0z M1 5h10v7H1z"/><path fill="#E8553D" d="M2 6h8v5H2z"/><path fill="#FF8A6B" d="M1 4h10v2H1z"/><path fill="#FFE48A" d="M3 1h2v1H3z M7 1h2v1H7z M2 2h4v1H2z M6 2h4v1H6z M4 3h4v1H4z"/><path fill="#F7C948" d="M5 4h2v7H5z"/></g>
+  </defs>
+</svg>
+
+<!-- ============ 사전예약 신청 전용 페이지 ============ -->
+<div id="viewPublic">
+
+  <header class="wrap topbar">
+    <div class="logo">
+      <svg width="36" height="30" viewBox="0 0 12 10" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-intro"/></svg>
+      <span class="gg">루미나 아카디아</span>
+    </div>
+    <nav aria-label="페이지 이동">
+      <a class="nv" href="#schedule">일정</a>
+      <a class="nv" href="#rewards">혜택</a>
+      <a class="nv" href="#reserve">사전예약</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1 class="sr">루미나 아카디아 사전예약</h1>
+
+    <div style="padding-top: clamp(8px, 2vw, 24px)">
+      <div class="car" role="region" aria-roledescription="carousel" aria-label="루미나 아카디아 사전예약 안내" id="car">
+        <div class="slide" role="group" aria-roledescription="slide" aria-label="1 / 5"><div class="slide-in"><svg class="art" viewBox="0 0 12 10" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-intro"/></svg><div class="sl-eyebrow">사전예약 진행 중</div><h2 class="sl-title">루미나 아카디아</h2><p class="sl-sub">꺼져 가는 빛의 도시를 다시 밝히는 판타지 모험</p></div><div class="dim"></div></div>
+        <div class="slide" role="group" aria-roledescription="slide" aria-label="2 / 5"><div class="slide-in"><svg class="art" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-schedule"/></svg><div class="sl-eyebrow">출시 일정</div><h2 class="sl-title">출시 전 사전예약 마감</h2><p class="sl-sub" id="slSched"></p></div><div class="dim"></div></div>
+        <div class="slide" role="group" aria-roledescription="slide" aria-label="3 / 5"><div class="slide-in"><svg class="art" viewBox="0 0 14 12" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-skin"/></svg><div class="sl-eyebrow">혜택 01</div><h2 class="sl-title">한정판 스킨</h2><p class="sl-sub">사전예약자만 받을 수 있는 한정판 스킨</p></div><div class="dim"></div></div>
+        <div class="slide" role="group" aria-roledescription="slide" aria-label="4 / 5"><div class="slide-in"><svg class="art" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-coupon"/></svg><div class="sl-eyebrow">혜택 02</div><h2 class="sl-title">인게임 재화 쿠폰</h2><p class="sl-sub">출시 첫날 바로 쓰는 인게임 재화 쿠폰</p></div><div class="dim"></div></div>
+        <div class="slide" role="group" aria-roledescription="slide" aria-label="5 / 5"><div class="slide-in"><svg class="art" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-goods"/></svg><div class="sl-eyebrow">혜택 03</div><h2 class="sl-title">실물 굿즈 추첨</h2><p class="sl-sub">사전예약 참여자 중 추첨으로 실물 굿즈 증정</p></div><div class="dim"></div></div>
+        <button type="button" class="car-btn prev" id="carPrev" aria-label="이전 배너"><svg width="18" height="30" viewBox="0 0 6 10" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="M4 0h2v1H4z M3 1h2v1H3z M2 2h2v1H2z M1 3h2v1H1z M0 4h2v2H0z M1 6h2v1H1z M2 7h2v1H2z M3 8h2v1H3z M4 9h2v1H4z"/></svg></button>
+        <button type="button" class="car-btn next" id="carNext" aria-label="다음 배너"><svg width="18" height="30" viewBox="0 0 6 10" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="M0 0h2v1H0z M1 1h2v1H1z M2 2h2v1H2z M3 3h2v1H3z M4 4h2v2H4z M3 6h2v1H3z M2 7h2v1H2z M1 8h2v1H1z M0 9h2v1H0z"/></svg></button>
+      </div>
+
+      <div style="display: flex; justify-content: center; align-items: center; gap: 10px; padding-top: 28px">
+        <div class="px" style="display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 16px; border: 3px solid var(--ink); background: #fff; font-size: 13px; box-shadow: 3px 3px 0 var(--ink)"><span id="curNo">01</span><span class="muted">/ 05</span></div>
+        <button type="button" class="pbtn" id="carPlay" aria-label="자동 재생 일시정지">
+          <svg id="icoPause" width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true"><path d="M1 0h2v8H1z M5 0h2v8H5z"/></svg>
+          <svg id="icoPlay" width="18" height="18" viewBox="0 0 8 8" shape-rendering="crispEdges" fill="currentColor" aria-hidden="true" hidden><path d="M1 0h2v8H1z M3 1h2v6H3z M5 2h2v4H5z"/></svg>
+        </button>
+      </div>
+
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 32px clamp(20px, 5vw, 48px) 0; text-align: center">
+        <div class="gg" style="display: inline-flex; align-items: center; gap: 10px; padding: 6px 14px; border: 3px solid var(--ink); background: var(--accent); font-size: 14px" aria-live="polite">
+          <span style="width: 8px; height: 8px; background: var(--ink)"></span>
+          <span id="statusText">사전예약 진행 중</span>
+          <span aria-hidden="true">·</span>
+          <span>지금까지 <b id="countPub">0</b>명 신청</span>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center">
+          <a href="#reserve" class="btn">사전예약 하기</a>
+          <a href="#rewards" class="btn paper">혜택 보기</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 01 출시 일정 -->
+    <section id="schedule" class="wrap sec" aria-labelledby="t-sched">
+      <div class="sec-head"><span class="no">01 /</span><h2 class="sec-t" id="t-sched">출시 일정 한눈에</h2></div>
+      <div class="dots"></div>
+      <div style="display: flex; flex-wrap: wrap; gap: 28px">
+        <div class="card" style="flex: 1 1 240px; min-width: 0; padding: 22px 24px; display: flex; flex-direction: column; gap: 8px">
+          <div class="px" style="font-size: 11px">STEP 01</div>
+          <div class="gg" style="font-size: 22px">사전예약 시작</div>
+          <div class="muted" id="dOpen"></div>
+        </div>
+        <div class="card" style="flex: 1 1 240px; min-width: 0; padding: 22px 24px; display: flex; flex-direction: column; gap: 8px; background: var(--accent)">
+          <div class="px" style="font-size: 11px">STEP 02 · 출시 전 마감</div>
+          <div class="gg" style="font-size: 22px">사전예약 마감</div>
+          <div id="dClose" style="font-weight: 700"></div>
+          <div class="px" id="dday" style="font-size: 13px"></div>
+        </div>
+        <div class="card" style="flex: 1 1 240px; min-width: 0; padding: 22px 24px; display: flex; flex-direction: column; gap: 8px">
+          <div class="px" style="font-size: 11px">STEP 03</div>
+          <div class="gg" style="font-size: 22px">정식 출시</div>
+          <div class="muted" id="dLaunch"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 혜택 -->
+    <section id="rewards" class="wrap sec" aria-labelledby="t-rew">
+      <div class="sec-head"><span class="no">02 /</span><h2 class="sec-t" id="t-rew">사전예약 혜택 3가지</h2></div>
+      <div class="dots"></div>
+      <p class="muted" style="margin: 0">사전예약 신청만 하면 모두 받을 수 있어요. 실물 굿즈는 추첨으로 제공됩니다.</p>
+      <div style="display: flex; flex-wrap: wrap; gap: 28px">
+        <div class="card"><div class="slot"><svg width="64" height="55" viewBox="0 0 14 12" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-skin"/></svg></div><div class="px">REWARD 01</div><h3 class="gg" style="margin: 0; font-size: 24px; font-weight: 400">한정판 스킨</h3><p class="muted" style="margin: 0">사전예약자만 받을 수 있는 한정판 스킨을 출시와 함께 드려요.</p></div>
+        <div class="card"><div class="slot"><svg width="60" height="60" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-coupon"/></svg></div><div class="px">REWARD 02</div><h3 class="gg" style="margin: 0; font-size: 24px; font-weight: 400">인게임 재화 쿠폰</h3><p class="muted" style="margin: 0">출시 첫날 바로 쓸 수 있는 인게임 재화 쿠폰을 지급해요.</p></div>
+        <div class="card"><div class="slot"><svg width="60" height="60" viewBox="0 0 12 12" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-goods"/></svg></div><div class="px">REWARD 03</div><h3 class="gg" style="margin: 0; font-size: 24px; font-weight: 400">실물 굿즈 추첨</h3><p class="muted" style="margin: 0">사전예약 참여자 중 추첨을 통해 실물 굿즈를 보내 드려요.</p></div>
+      </div>
+    </section>
+
+    <!-- 03 사전예약 -->
+    <section id="reserve" class="wrap sec" style="padding-bottom: clamp(64px, 9vw, 112px)" aria-labelledby="t-res">
+      <div style="display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start">
+        <div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 18px">
+          <span class="no" style="align-self: flex-start">03 /</span>
+          <h2 class="sec-t" id="t-res">지금 사전예약하고<br>출시 첫날 혜택을 받으세요</h2>
+          <p style="margin: 0">사전예약은 정식 출시 전에 마감돼요. 마감일은 <b id="dClose2"></b> 입니다.</p>
+          <p class="muted" style="margin: 0; font-size: 14px">로그인이나 결제 없이 이름, 연락처, 이메일만으로 신청할 수 있어요. 구글 스프레드시트 데이터베이스에 안전하게 보관됩니다.</p>
+        </div>
+
+        <div class="card" style="flex: 1 1 400px; min-width: 0">
+          <div class="formbar"><i></i><i></i><i></i><span class="px" style="margin-left: auto; font-size: 11px; color: #fff">PRE-REGISTER</span></div>
+          <div style="padding: clamp(22px, 4vw, 34px)">
+
+            <form id="form" novalidate style="display: flex; flex-direction: column; gap: 22px">
+              <div class="alert info" id="closedBox" role="alert" hidden>사전예약이 마감되었어요. 다음 소식을 기다려 주세요.</div>
+              <div class="alert" id="formAlert" role="alert" hidden></div>
+
+              <div class="field">
+                <label for="f-name" class="lbl">이름</label>
+                <input id="f-name" class="inp" type="text" maxlength="20" placeholder="이름을 입력하세요" autocomplete="off" aria-describedby="e-name">
+                <div class="err" id="e-name" aria-live="polite"></div>
+              </div>
+
+              <div class="field">
+                <label for="f-phone" class="lbl">연락처</label>
+                <input id="f-phone" class="inp" type="tel" inputmode="numeric" placeholder="010-0000-0000" autocomplete="off" aria-describedby="e-phone">
+                <div class="err" id="e-phone" aria-live="polite"></div>
+              </div>
+
+              <div class="field">
+                <label for="f-email" class="lbl">이메일</label>
+                <input id="f-email" class="inp" type="email" placeholder="name@example.com" autocomplete="off" aria-describedby="e-email">
+                <div class="err" id="e-email" aria-live="polite"></div>
+              </div>
+
+              <div class="field" style="gap: 12px">
+                <div id="f-platform-label" class="lbl">주 이용 플랫폼</div>
+                <div role="group" aria-labelledby="f-platform-label" id="platforms" style="display: flex; flex-wrap: wrap; gap: 12px"></div>
+                <div class="err" id="e-platform" aria-live="polite"></div>
+              </div>
+
+              <div class="field" style="gap: 10px">
+                <div class="terms">
+                  <div>수집 항목: 이름, 연락처, 이메일, 주 이용 플랫폼</div>
+                  <div>이용 목적: 사전예약 혜택 지급, 굿즈 추첨, 출시 안내</div>
+                  <div>보유 기간: 혜택 지급이 끝난 뒤 파기 (예시)</div>
+                </div>
+                <label for="f-agree" class="agree"><input id="f-agree" type="checkbox" aria-describedby="e-agree"><span>개인정보 수집·이용에 동의합니다. (필수)</span></label>
+                <div class="err" id="e-agree" aria-live="polite"></div>
+              </div>
+
+              <button type="button" class="btn" id="submitBtn" style="width: 100%"><span id="submitLabel">사전예약 신청하기</span></button>
+            </form>
+
+            <div id="done" role="status" style="display: flex; flex-direction: column; gap: 16px; align-items: flex-start" hidden>
+              <svg width="72" height="60" viewBox="0 0 12 10" shape-rendering="crispEdges" aria-hidden="true"><use href="#i-intro"/></svg>
+              <h3 class="gg" style="margin: 0; font-size: 28px; font-weight: 400">사전예약이 완료되었어요</h3>
+              <p style="margin: 0" id="doneText"></p>
+              <div style="padding: 12px 16px; border: 3px solid var(--ink); background: var(--accent); font-weight: 700; width: 100%" id="donePlat"></div>
+              <button type="button" class="btn paper" id="againBtn">다른 연락처로 신청하기</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 피드백 메모 -->
+      <div style="margin-top: 56px; max-width: 640px; display: flex; flex-direction: column; gap: 12px">
+        <h3 class="gg" style="margin: 0; font-size: 22px; font-weight: 400">신청하면서 불편했던 점이 있나요?</h3>
+        <label for="memo" class="sr">피드백 메모</label>
+        <textarea id="memo" class="inp" maxlength="300" placeholder="예: 중복 안내 문구가 헷갈렸어요"></textarea>
+        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap">
+          <button type="button" class="btn small paper" id="memoBtn">메모 남기기</button>
+          <span class="muted" id="memoMsg" style="font-size: 14px" aria-live="polite"></span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site">
+    <div class="wrap">
+      <span>© 루미나 아카디아</span>
+      <span>수업용 가상 게임 사전예약 페이지입니다. 입력한 정보는 Google 스프레드시트 DB에 안전하게 보관됩니다.</span>
+    </div>
+  </footer>
+</div>
+
+<script type="module" src="/src/app.ts"></script>
+</body>
+</html>

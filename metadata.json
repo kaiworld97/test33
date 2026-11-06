@@ -1,0 +1,8 @@
+{
+  "name": "루미나 아카디아 사전예약",
+  "description": "꺼져 가는 빛의 도시를 다시 밝히는 판타지 모험, 루미나 아카디아 사전예약 및 신청 관리 이벤트 페이지",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
